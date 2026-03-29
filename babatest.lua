@@ -1,80 +1,55 @@
---[[
-    ╔════════════════════════════════════════════════════════════════════╗
-    ║                      RYSA CHEAT v2.0                              ║
-    ║              Roblox Executor Compatible Cheat                      ║
-    ║        ESP | Aimbot | Wallshot | BunnyHop | Full Features          ║
-    ╚════════════════════════════════════════════════════════════════════╝
-]]
+local xffafas = {}
+local allahbabacan = getgenv()
+allahbabacan.xffafas = xffafas
 
-if getgenv().RysaCheat then
-    getgenv().RysaCheat:Destroy()
-end
-
-local RysaCheat = {}
-getgenv().RysaCheat = RysaCheat
-
---// Services
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
---// Variables
-local ESPObjects = {}
-local FriendList = {}
-local MenuOpen = true
-local SelectedTab = 1
-local Connections = {}
-local TabOffset = 0
+local qwerty_123 = {}
+local zxcvbn_456 = {}
+local asdfgh_789 = true
+local poiuyt_000 = 1
+local lkjhgf_111 = 0
 
---// Settings
-RysaCheat.Settings = {
+xffafas.kdjsalkdj = {
     Enabled = true,
     AimbotEnabled = false,
     ESPEnabled = true,
     NoClipEnabled = false,
     BunnyHopEnabled = false,
-    
     TeamCheck = false,
     AliveCheck = true,
-    
     MaxDistance = 500,
     LockPart = "Head",
     MenuKey = Enum.KeyCode.End
 }
 
---// ESP Settings
-RysaCheat.ESPSettings = {
+xffafas.mnbvcxz = {
     BoxEnabled = true,
     BoxColor = Color3.fromRGB(0, 255, 0),
     BoxThickness = 2,
-    
     NameEnabled = true,
     NameColor = Color3.fromRGB(255, 255, 255),
     NameSize = 13,
-    
     HealthEnabled = true,
     HealthBarWidth = 50,
     HealthBarHeight = 4,
-    
     DistanceEnabled = true,
     DistanceColor = Color3.fromRGB(200, 200, 200),
     DistanceSize = 11,
-    
     ChineseHatEnabled = true,
     ChineseHatColor = Color3.fromRGB(255, 200, 0),
     ChineseHatSize = 30,
-    
     EnemyColor = Color3.fromRGB(255, 0, 0),
     AllyColor = Color3.fromRGB(0, 255, 0),
     FriendColor = Color3.fromRGB(0, 150, 255),
-    
     OutlineColor = Color3.fromRGB(0, 0, 0)
 }
 
---// FOV Settings
-RysaCheat.FOVSettings = {
+xffafas.qazwsx = {
     Enabled = true,
     Visible = true,
     Amount = 150,
@@ -86,8 +61,7 @@ RysaCheat.FOVSettings = {
     Filled = false
 }
 
---// Aimbot Settings
-RysaCheat.AimbotSettings = {
+xffafas.edcrfvtgy = {
     Enabled = false,
     Smoothing = 0.15,
     Prediction = true,
@@ -95,16 +69,14 @@ RysaCheat.AimbotSettings = {
     IgnoreFriends = true
 }
 
---// BunnyHop Settings
-RysaCheat.BunnyHopSettings = {
+xffafas.ujmnyhtgb = {
     Enabled = false,
     Speed = 50,
     Height = 50,
     AutoHop = true
 }
 
---// Advanced Settings
-RysaCheat.AdvancedSettings = {
+xffafas.ikoljuhyg = {
     ShowHeadDots = true,
     HeadDotSize = 4,
     HeadDotColor = Color3.fromRGB(255, 255, 0),
@@ -112,9 +84,37 @@ RysaCheat.AdvancedSettings = {
     ShowFPS = true
 }
 
---// Menu Settings
-RysaCheat.MenuSettings = {
+xffafas.plokijuh = {
     MenuPosition = UDim2.new(0, 20, 0, 20),
+    MenuSize = UDim2.new(0, 280, 0, 650),
+    MenuColor = Color3.fromRGB(15, 15, 25),
+    MenuTransparency = 0.1,
+    AccentColor = Color3.fromRGB(0, 150, 255),
+    TextColor = Color3.fromRGB(255, 255, 255),
+    TabColor = Color3.fromRGB(25, 25, 40),
+    TabActiveColor = Color3.fromRGB(0, 150, 255)
+}
+
+xffafas.wertyu = Drawing.new("Circle")
+
+local mnbvcxz_ui = {
+    MainFrame = nil,
+    Elements = {},
+    FPS = nil,
+    LastFPS = 0,
+    FPSCounter = 0,
+    TabButtons = {},
+    TabContents = {}
+}
+
+local function qwerty_create_menu()
+    local MenuX = xffafas.plokijuh.MenuPosition.X.Offset
+    local MenuY = xffafas.plokijuh.MenuPosition.Y.Offset
+    local MenuW = xffafas.plokijuh.MenuSize.X.Offset
+    local MenuH = xffafas.plokijuh.MenuSize.Y.Offset
+    
+    local MainFrame = Drawing.new("Square")
+    MainFrame.Size = xffafas.plokijuh.Menu,
     MenuSize = UDim2.new(0, 280, 0, 650),
     MenuColor = Color3.fromRGB(15, 15, 25),
     MenuTransparency = 0.1,
