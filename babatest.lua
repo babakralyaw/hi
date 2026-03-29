@@ -1,871 +1,472 @@
 --[[
-RYSA CHEAT + BLADE BALL MODULE
-Tüm özellikler tek menüde birleştirildi
-Menü: RightShift (Sağ Shift)
+RYSA CHEAT - NEVERLOSE LIBRARY
+Menü: End tuşu
 ]]
 
-local TweenService=game:GetService("TweenService")
-local UIS=game:GetService("UserInputService")
-local LP=game:GetService("Players").LocalPlayer
-local HS=game:GetService("HttpService")
-local Players=game:GetService("Players")
-local CoreGui=game:GetService("CoreGui")
-local RunService=game:GetService("RunService")
-local WS=game:GetService("Workspace")
-local RS=game:GetService("ReplicatedStorage")
-local TS=game:GetService("TeleportService")
-local Lighting=game:GetService("Lighting")
-local cam=WS.CurrentCamera
-local mouse=LP:GetMouse()
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+if game.CoreGui:FindFirstChild("Library") then
+    game.CoreGui:FindFirstChild("Library"):Destroy()
+end
+
+local VLib = {RainbowColorValue = 0, HueSelectionPosition = 0}
 local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
 
-pcall(function() if CoreGui:FindFirstChild("RysaCheat") then CoreGui:FindFirstChild("RysaCheat"):Destroy() end end)
-pcall(function() settings().Physics.AllowSleep=false end)
-pcall(function() settings().Physics.PhysicsEnvironmentalThrottle=Enum.EnviromentalPhysicsThrottle.Disabled end)
+coroutine.wrap(function()
+    while wait() do
+        VLib.RainbowColorValue = VLib.RainbowColorValue + 1 / 255
+        VLib.HueSelectionPosition = VLib.HueSelectionPosition + 1
 
-local SKEY="RysaCheatCFG"
-local DEF={toggleKey="RightShift",flyKey="F5",noclipKey="N",freecamKey="F6",godKey="G",espKey="",touchFlingKey="T",flingAllKey="",infJumpKey="",antiVoidKey="",fullbrightKey="",noFogKey="",antiAfkKey="",antiSlowKey="",autoload=false}
-local function loadCFG() local s pcall(function() if readfile then s=HS:JSONDecode(readfile(SKEY..".json")) end end) if not s then s={} end for k,v in pairs(DEF) do if s[k]==nil then s[k]=v end end return s end
-local function saveCFG(s) pcall(function() if writefile then writefile(SKEY..".json",HS:JSONEncode(s)) end end) end
-local CFG=loadCFG()
-
-local gui=Instance.new("ScreenGui") 
-gui.Name="RysaCheat" 
-gui.ZIndexBehavior=Enum.ZIndexBehavior.Sibling 
-gui.ResetOnSpawn=false 
-gui.Parent=LP:WaitForChild("PlayerGui")
-
-local C={Bg=Color3.fromRGB(10,10,10),Bg2=Color3.fromRGB(18,18,18),Bg3=Color3.fromRGB(28,28,28),Ac=Color3.fromRGB(48,48,48),AcH=Color3.fromRGB(62,62,62),AcL=Color3.fromRGB(35,35,35),W=Color3.fromRGB(255,255,255),D=Color3.fromRGB(130,130,130),R=Color3.fromRGB(160,35,35),RH=Color3.fromRGB(200,50,50)}
-
---// YENI AIMBOT SİSTEMİ
-local select = select
-local pcall, getgenv, next, Vector2, mathclamp, type, mousemoverel = select(1, pcall, getgenv, next, Vector2.new, math.clamp, type, mousemoverel or (Input and Input.MouseMove))
-
-pcall(function()
-    getgenv().Aimbot.Functions:Exit()
-end)
-
-getgenv().Aimbot = {}
-local Environment = getgenv().Aimbot
-
-local RunService2 = game:GetService("RunService")
-local UserInputService2 = game:GetService("UserInputService")
-local TweenService2 = game:GetService("TweenService")
-local Players2 = game:GetService("Players")
-local Camera2 = workspace.CurrentCamera
-local LocalPlayer2 = Players2.LocalPlayer
-
-local RequiredDistance, Typing, Running, Animation, ServiceConnections = 2000, false, false, nil, {}
-
-Environment.Settings = {
-    Enabled = true,
-    TeamCheck = false,
-    AliveCheck = true,
-    WallCheck = false,
-    Sensitivity = 0,
-    ThirdPerson = false,
-    ThirdPersonSensitivity = 3,
-    TriggerKey = "MouseButton2",
-    Toggle = false,
-    LockPart = "Head"
-}
-
-Environment.FOVSettings = {
-    Enabled = true,
-    Visible = true,
-    Amount = 90,
-    Color = Color3.fromRGB(255, 255, 255),
-    LockedColor = Color3.fromRGB(255, 70, 70),
-    Transparency = 0.5,
-    Sides = 60,
-    Thickness = 1,
-    Filled = false
-}
-
-Environment.FOVCircle = Drawing.new("Circle")
-
-local function CancelLock()
-    Environment.Locked = nil
-    if Animation then Animation:Cancel() end
-    Environment.FOVCircle.Color = Environment.FOVSettings.Color
-end
-
-local function GetClosestPlayer()
-    if not Environment.Locked then
-        RequiredDistance = (Environment.FOVSettings.Enabled and Environment.FOVSettings.Amount or 2000)
-        for _, v in next, Players2:GetPlayers() do
-            if v ~= LocalPlayer2 then
-                if v.Character and v.Character:FindFirstChild(Environment.Settings.LockPart) and v.Character:FindFirstChildOfClass("Humanoid") then
-                    if Environment.Settings.TeamCheck and v.Team == LocalPlayer2.Team then continue end
-                    if Environment.Settings.AliveCheck and v.Character:FindFirstChildOfClass("Humanoid").Health <= 0 then continue end
-                    if Environment.Settings.WallCheck and #(Camera2:GetPartsObscuringTarget({v.Character[Environment.Settings.LockPart].Position}, v.Character:GetDescendants())) > 0 then continue end
-                    
-                    local Vector, OnScreen = Camera2:WorldToViewportPoint(v.Character[Environment.Settings.LockPart].Position)
-                    local Distance = (Vector2(UserInputService2:GetMouseLocation().X, UserInputService2:GetMouseLocation().Y) - Vector2(Vector.X, Vector.Y)).Magnitude
-                    if Distance < RequiredDistance and OnScreen then
-                        RequiredDistance = Distance
-                        Environment.Locked = v
-                    end
-                end
-            end
+        if VLib.RainbowColorValue >= 1 then
+            VLib.RainbowColorValue = 0
         end
-    else
-        if (Vector2(UserInputService2:GetMouseLocation().X, UserInputService2:GetMouseLocation().Y) - Vector2(Camera2:WorldToViewportPoint(Environment.Locked.Character[Environment.Settings.LockPart].Position).X, Camera2:WorldToViewportPoint(Environment.Locked.Character[Environment.Settings.LockPart].Position).Y)).Magnitude > RequiredDistance then
-            CancelLock()
+
+        if VLib.HueSelectionPosition == 80 then
+            VLib.HueSelectionPosition = 0
         end
     end
+end)()
+
+local function MakeDraggable(topbarobject, object)
+    local Dragging = nil
+    local DragInput = nil
+    local DragStart = nil
+    local StartPosition = nil
+
+    local function Update(input)
+        local Delta = input.Position - DragStart
+        local pos = UDim2.new(
+            StartPosition.X.Scale,
+            StartPosition.X.Offset + Delta.X,
+            StartPosition.Y.Scale,
+            StartPosition.Y.Offset + Delta.Y
+        )
+        local Tween = TweenService:Create(object, TweenInfo.new(0.2), {Position = pos})
+        Tween:Play()
+    end
+
+    topbarobject.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            Dragging = true
+            DragStart = input.Position
+            StartPosition = object.Position
+
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    Dragging = false
+                end
+            end)
+        end
+    end)
+
+    topbarobject.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            DragInput = input
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input == DragInput and Dragging then
+            Update(input)
+        end
+    end)
 end
 
-ServiceConnections.TypingStartedConnection = UserInputService2.TextBoxFocused:Connect(function()
-    Typing = true
-end)
+local Library = Instance.new("ScreenGui")
+Library.Name = "Library"
+Library.Parent = game.CoreGui
+Library.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-ServiceConnections.TypingEndedConnection = UserInputService2.TextBoxFocusReleased:Connect(function()
-    Typing = false
-end)
-
-local function Load()
-    ServiceConnections.RenderSteppedConnection = RunService2.RenderStepped:Connect(function()
-        if Environment.FOVSettings.Enabled and Environment.Settings.Enabled then
-            Environment.FOVCircle.Radius = Environment.FOVSettings.Amount
-            Environment.FOVCircle.Thickness = Environment.FOVSettings.Thickness
-            Environment.FOVCircle.Filled = Environment.FOVSettings.Filled
-            Environment.FOVCircle.NumSides = Environment.FOVSettings.Sides
-            Environment.FOVCircle.Color = Environment.FOVSettings.Color
-            Environment.FOVCircle.Transparency = Environment.FOVSettings.Transparency
-            Environment.FOVCircle.Visible = Environment.FOVSettings.Visible
-            Environment.FOVCircle.Position = Vector2(UserInputService2:GetMouseLocation().X, UserInputService2:GetMouseLocation().Y)
+local uitoggled = false
+UserInputService.InputBegan:Connect(function(io, p)
+    if io.KeyCode == Enum.KeyCode.End then
+        if uitoggled == false then
+            Library.Enabled = false
+            uitoggled = true
         else
-            Environment.FOVCircle.Visible = false
+            Library.Enabled = true
+            uitoggled = false
         end
-        
-        if Running and Environment.Settings.Enabled then
-            GetClosestPlayer()
-            if Environment.Locked then
-                if Environment.Settings.ThirdPerson then
-                    Environment.Settings.ThirdPersonSensitivity = mathclamp(Environment.Settings.ThirdPersonSensitivity, 0.1, 5)
-                    local Vector = Camera2:WorldToViewportPoint(Environment.Locked.Character[Environment.Settings.LockPart].Position)
-                    mousemoverel((Vector.X - UserInputService2:GetMouseLocation().X) * Environment.Settings.ThirdPersonSensitivity, (Vector.Y - UserInputService2:GetMouseLocation().Y) * Environment.Settings.ThirdPersonSensitivity)
-                elseif Environment.Settings.Sensitivity > 0 then
-                    Animation = TweenService2:Create(Camera2, TweenInfo.new(Environment.Settings.Sensitivity, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(Camera2.CFrame.Position, Environment.Locked.Character[Environment.Settings.LockPart].Position)})
-                    Animation:Play()
+    end
+end)
+
+function VLib:Window(text, textgame, textcircle)
+    local FirstTab = false
+    local MainFrame = Instance.new("Frame")
+    local MainCorner = Instance.new("UICorner")
+    local LeftFrame = Instance.new("Frame")
+    local LeftFrameCorner = Instance.new("UICorner")
+    local MainTitle = Instance.new("TextLabel")
+    local Circle = Instance.new("Frame")
+    local CircleCorner = Instance.new("UICorner")
+    local CircleName = Instance.new("TextLabel")
+    local GameTitle = Instance.new("TextLabel")
+    local TabHolder = Instance.new("Frame")
+    local TabHoldLayout = Instance.new("UIListLayout")
+    local RainbowLine = Instance.new("Frame")
+    local RainbowLineCorner = Instance.new("UICorner")
+    local ContainerHold = Instance.new("Folder")
+    local DragFrame = Instance.new("Frame")
+    local Glow = Instance.new("ImageLabel")
+
+    MainFrame.Name = "MainFrame"
+    MainFrame.Parent = Library
+    MainFrame.BackgroundColor3 = Color3.fromRGB(27, 27, 27)
+    MainFrame.Position = UDim2.new(0.5, -325, 0.5, -250)
+    MainFrame.Size = UDim2.new(0, 650, 0, 500)
+
+    MainCorner.CornerRadius = UDim.new(0, 5)
+    MainCorner.Name = "MainCorner"
+    MainCorner.Parent = MainFrame
+
+    LeftFrame.Name = "LeftFrame"
+    LeftFrame.Parent = MainFrame
+    LeftFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    LeftFrame.Position = UDim2.new(-0.000674468291, 0, -0.000149806539, 0)
+    LeftFrame.Size = UDim2.new(0, 190, 0, 500)
+
+    LeftFrameCorner.CornerRadius = UDim.new(0, 5)
+    LeftFrameCorner.Name = "LeftFrameCorner"
+    LeftFrameCorner.Parent = LeftFrame
+
+    MainTitle.Name = "MainTitle"
+    MainTitle.Parent = LeftFrame
+    MainTitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    MainTitle.BackgroundTransparency = 1.000
+    MainTitle.Position = UDim2.new(0.168, 0, 0.043, 0)
+    MainTitle.Size = UDim2.new(0, 71, 0, 20)
+    MainTitle.Font = Enum.Font.Gotham
+    MainTitle.Text = text
+    MainTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    MainTitle.TextSize = 25.000
+    MainTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    GameTitle.Name = "GameTitle"
+    GameTitle.Parent = LeftFrame
+    GameTitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    GameTitle.BackgroundTransparency = 1.000
+    GameTitle.Position = UDim2.new(0.168, 0, 0.089, 6)
+    GameTitle.Size = UDim2.new(0, 71, 0, 20)
+    GameTitle.Font = Enum.Font.Gotham
+    GameTitle.Text = textgame
+    GameTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    GameTitle.TextSize = 17.000
+    GameTitle.TextTransparency = 0.400
+    GameTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    TabHolder.Name = "TabHolder"
+    TabHolder.Parent = LeftFrame
+    TabHolder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TabHolder.BackgroundTransparency = 1.000
+    TabHolder.Position = UDim2.new(0.0806451589, 0, 0.189360261, 0)
+    TabHolder.Size = UDim2.new(0, 159, 0, 309)
+
+    TabHoldLayout.Name = "TabHoldLayout"
+    TabHoldLayout.Parent = TabHolder
+    TabHoldLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    TabHoldLayout.Padding = UDim.new(0, 5)
+
+    ContainerHold.Name = "ContainerHold"
+    ContainerHold.Parent = MainFrame
+
+    DragFrame.Name = "DragFrame"
+    DragFrame.Parent = MainFrame
+    DragFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    DragFrame.BackgroundTransparency = 1.000
+    DragFrame.Position = UDim2.new(0.30130294, 0, 0.00253164559, 0)
+    DragFrame.Size = UDim2.new(0, 428, 0, 21)
+
+    Glow.Name = "Glow"
+    Glow.Parent = LeftFrame
+    Glow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Glow.BackgroundTransparency = 1.000
+    Glow.BorderSizePixel = 0
+    Glow.Position = UDim2.new(0, -15, 0, -15)
+    Glow.Size = UDim2.new(1, 30, 1, 30)
+    Glow.ZIndex = 0
+    Glow.Image = "rbxassetid://4996891970"
+    Glow.ImageColor3 = Color3.fromRGB(15, 15, 15)
+    Glow.ScaleType = Enum.ScaleType.Slice
+    Glow.SliceCenter = Rect.new(20, 20, 280, 280)
+
+    MakeDraggable(DragFrame, MainFrame)
+
+    local Tabs = {}
+    function Tabs:Tab(text)
+        local Tab = Instance.new("TextButton")
+        local TabCorner = Instance.new("UICorner")
+        local Title = Instance.new("TextLabel")
+        local UIGradient = Instance.new('UIGradient')
+        Tab.Name = "Tab"
+        Tab.Parent = TabHolder
+        Tab.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Tab.Size = UDim2.new(0, 170, 0, 35)
+        Tab.AutoButtonColor = false
+        Tab.Font = Enum.Font.SourceSans
+        Tab.Text = ""
+        Tab.TextColor3 = Color3.fromRGB(0, 0, 0)
+        Tab.TextSize = 15.000
+        Tab.BackgroundTransparency = 1
+
+        UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(160, 207, 236)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(102, 152, 255))}
+        UIGradient.Parent = Tab
+
+        TabCorner.CornerRadius = UDim.new(0, 3)
+        TabCorner.Name = "TabCorner"
+        TabCorner.Parent = Tab
+
+        Title.Name = "Title"
+        Title.Parent = Tab
+        Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Title.BackgroundTransparency = 1.000
+        Title.Position = UDim2.new(0.0566037744, 0, 0.1, 0)
+        Title.Size = UDim2.new(0, 150, 0, 29)
+        Title.Font = Enum.Font.Gotham
+        Title.Text = text
+        Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Title.TextSize = 17.000
+        Title.TextXAlignment = Enum.TextXAlignment.Left
+
+        local Container = Instance.new("ScrollingFrame")
+        local ContainerLayout = Instance.new("UIListLayout")
+
+        Container.Name = "Container"
+        Container.Parent = ContainerHold
+        Container.Active = true
+        Container.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Container.BackgroundTransparency = 1.000
+        Container.BorderSizePixel = 0
+        Container.Position = UDim2.new(0.34, 0, 0.0506329127, 0)
+        Container.Size = UDim2.new(0, 420, 0, 450)
+        Container.ScrollBarThickness = 5
+        Container.CanvasSize = UDim2.new(0, 0, 0, 0)
+        Container.Visible = false
+        Container.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+
+        ContainerLayout.Name = "ContainerLayout"
+        ContainerLayout.Parent = Container
+        ContainerLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        ContainerLayout.Padding = UDim.new(0, 15)
+
+        if FirstTab == false then
+            FirstTab = true
+            Tab.BackgroundTransparency = 0
+            Container.Visible = true
+        end
+        Tab.MouseButton1Click:Connect(function()
+            for i, v in next, ContainerHold:GetChildren() do
+                if v.Name == "Container" then
+                    v.Visible = false
+                end
+            end
+
+            for i, v in next, TabHolder:GetChildren() do
+                if v.ClassName == "TextButton" then
+                    TweenService:Create(
+                        v,
+                        TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                        {BackgroundTransparency = 1}
+                    ):Play()
+                    TweenService:Create(
+                        Tab,
+                        TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                        {BackgroundTransparency = 0}
+                    ):Play()
+                end
+            end
+            Container.Visible = true
+        end)
+        local ContainerItems = {}
+        function ContainerItems:Button(text, callback)
+            local Button = Instance.new("TextButton")
+            local ButtonCorner = Instance.new("UICorner")
+
+            Button.Name = "Button"
+            Button.Parent = Container
+            Button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+            Button.Size = UDim2.new(0, 405, 0, 40)
+            Button.AutoButtonColor = false
+            Button.Font = Enum.Font.Gotham
+            Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Button.TextSize = 15.000
+            Button.Text = text
+
+            ButtonCorner.CornerRadius = UDim.new(0, 5)
+            ButtonCorner.Name = "ButtonCorner"
+            ButtonCorner.Parent = Button
+
+            Button.MouseEnter:Connect(function()
+                TweenService:Create(
+                    Button,
+                    TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                    {BackgroundColor3 = Color3.fromRGB(45, 45, 45)}
+                ):Play()
+            end)
+            Button.MouseLeave:Connect(function()
+                TweenService:Create(
+                    Button,
+                    TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                    {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}
+                ):Play()
+            end)
+
+            Container.CanvasSize = UDim2.new(0, 0, 0, ContainerLayout.AbsoluteContentSize.Y)
+
+            Button.MouseButton1Click:Connect(function()
+                pcall(callback)
+                Button.TextSize = 0
+                TweenService:Create(Button, TweenInfo.new(.2, Enum.EasingStyle.Quad), {TextSize = 17}):Play()
+                wait(.2)
+                TweenService:Create(Button, TweenInfo.new(.2, Enum.EasingStyle.Quad), {TextSize = 14}):Play()
+            end)
+        end
+        function ContainerItems:Toggle(text, Default, callback)
+            local Toggled = Default or false
+            local Toggle = Instance.new("TextButton")
+            local ToggleCorner = Instance.new("UICorner")
+            local Title = Instance.new("TextLabel")
+            local ToggleFrame = Instance.new("Frame")
+            local ToggleFrameCorner = Instance.new("UICorner")
+            local ToggleDot = Instance.new("Frame")
+            local ToggleDotCorner = Instance.new("UICorner")
+            local UIGradient_2 = Instance.new('UIGradient')
+            Toggle.Name = "Toggle"
+            Toggle.Parent = Container
+            Toggle.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+            Toggle.Size = UDim2.new(0, 405, 0, 40)
+            Toggle.AutoButtonColor = false
+            Toggle.Font = Enum.Font.Gotham
+            Toggle.Text = ""
+            Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Toggle.TextSize = 14.000
+
+            ToggleCorner.CornerRadius = UDim.new(0, 5)
+            ToggleCorner.Name = "ToggleCorner"
+            ToggleCorner.Parent = Toggle
+
+            Title.Name = "Title"
+            Title.Parent = Toggle
+            Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Title.BackgroundTransparency = 1.000
+            Title.Position = UDim2.new(0.0198511165, 0, 0, 0)
+            Title.Size = UDim2.new(0, 430, 0, 40)
+            Title.Font = Enum.Font.Gotham
+            Title.Text = text
+            Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Title.TextSize = 15.000
+            Title.TextXAlignment = Enum.TextXAlignment.Left
+
+            ToggleFrame.Name = "ToggleFrame"
+            ToggleFrame.Parent = Toggle
+            ToggleFrame.BackgroundColor3 = Color3.fromRGB(22, 23, 27)
+            ToggleFrame.Position = UDim2.new(0.88, 0, 0.21, 0)
+            ToggleFrame.Size = UDim2.new(0, 40, 0, 22)
+
+            ToggleFrameCorner.CornerRadius = UDim.new(1, 0)
+            ToggleFrameCorner.Name = "ToggleFrameCorner"
+            ToggleFrameCorner.Parent = ToggleFrame
+
+            ToggleDot.Name = "ToggleDot"
+            ToggleDot.Parent = ToggleFrame
+            ToggleDot.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            ToggleDot.Position = UDim2.new(0.104999997, -3, 0.289000005, -4)
+            ToggleDot.Size = UDim2.new(0, 16, 0, 16)
+
+            UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(160, 207, 236)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(102, 152, 255))}
+            UIGradient_2.Parent = ToggleDot
+
+            ToggleDotCorner.CornerRadius = UDim.new(1, 0)
+            ToggleDotCorner.Name = "ToggleDotCorner"
+            ToggleDotCorner.Parent = ToggleDot
+
+            Toggle.MouseEnter:Connect(function()
+                TweenService:Create(
+                    Toggle,
+                    TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                    {BackgroundColor3 = Color3.fromRGB(45, 45, 45)}
+                ):Play()
+            end)
+            Toggle.MouseLeave:Connect(function()
+                TweenService:Create(
+                    Toggle,
+                    TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                    {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}
+                ):Play()
+            end)
+
+            if Toggled == true then
+                UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(160, 207, 236)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(102, 152, 255))}
+                TweenService:Create(
+                    ToggleFrame,
+                    TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                    {BackgroundTransparency = 0}
+                ):Play()
+                TweenService:Create(
+                    ToggleDot,
+                    TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                    {Position = UDim2.new(0.595, -3, 0.289000005, -4)}
+                ):Play()
+                pcall(callback, Toggled)
+            else
+                TweenService:Create(
+                    ToggleFrame,
+                    TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                    {BackgroundTransparency = 1}
+                ):Play()
+                TweenService:Create(
+                    ToggleDot,
+                    TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                    {Position = UDim2.new(0.104999997, -3, 0.289000005, -4)}
+                ):Play()
+            end
+
+            Toggle.MouseButton1Click:Connect(function()
+                if Toggled == false then
+                    UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(160, 207, 236)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(102, 152, 255))}
+                    TweenService:Create(
+                        ToggleFrame,
+                        TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                        {BackgroundTransparency = 0}
+                    ):Play()
+                    TweenService:Create(
+                        ToggleDot,
+                        TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                        {Position = UDim2.new(0.595, -3, 0.289000005, -4)}
+                    ):Play()
                 else
-                    Camera2.CFrame = CFrame.new(Camera2.CFrame.Position, Environment.Locked.Character[Environment.Settings.LockPart].Position)
+                    TweenService:Create(
+                        ToggleFrame,
+                        TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                        {BackgroundTransparency = 1}
+                    ):Play()
+                    TweenService:Create(
+                        ToggleDot,
+                        TweenInfo.new(.2, Enum.EasingStyle.Quad),
+                        {Position = UDim2.new(0.104999997, -3, 0.289000005, -4)}
+                    ):Play()
                 end
-            end
-            Environment.FOVCircle.Color = Environment.FOVSettings.LockedColor
-        end
-    end)
-    
-    ServiceConnections.InputBeganConnection = UserInputService2.InputBegan:Connect(function(Input)
-        if not Typing then
-            pcall(function()
-                if Input.KeyCode == Enum.KeyCode[Environment.Settings.TriggerKey] then
-                    if Environment.Settings.Toggle then
-                        Running = not Running
-                        if not Running then
-                            CancelLock()
-                        end
-                    else
-                        Running = true
-                    end
-                end
+                Toggled = not Toggled
+                pcall(callback, Toggled)
             end)
-            pcall(function()
-                if Input.UserInputType == Enum.UserInputType[Environment.Settings.TriggerKey] then
-                    if Environment.Settings.Toggle then
-                        Running = not Running
-                        if not Running then
-                            CancelLock()
-                        end
-                    else
-                        Running = true
-                    end
-                end
-            end)
+
+            Container.CanvasSize = UDim2.new(0, 0, 0, ContainerLayout.AbsoluteContentSize.Y)
         end
-    end)
-    
-    ServiceConnections.InputEndedConnection = UserInputService2.InputEnded:Connect(function(Input)
-        if not Typing then
-            if not Environment.Settings.Toggle then
-                pcall(function()
-                    if Input.KeyCode == Enum.KeyCode[Environment.Settings.TriggerKey] then
-                        Running = false; CancelLock()
-                    end
-                end)
-                pcall(function()
-                    if Input.UserInputType == Enum.UserInputType[Environment.Settings.TriggerKey] then
-                        Running = false; CancelLock()
-                    end
-                end)
-            end
-        end
-    end)
-end
-
-Environment.Functions = {}
-
-function Environment.Functions:Exit()
-    for _, v in next, ServiceConnections do
-        v:Disconnect()
+        return ContainerItems
     end
-    if Environment.FOVCircle.Remove then Environment.FOVCircle:Remove() end
-    getgenv().Aimbot.Functions = nil
-    getgenv().Aimbot = nil
-    Load = nil; GetClosestPlayer = nil; CancelLock = nil
+    return Tabs
 end
 
-function Environment.Functions:Restart()
-    for _, v in next, ServiceConnections do
-        v:Disconnect()
-    end
-    Load()
-end
+local Rysa = VLib:Window("RYSA", "CHEAT", "")
 
-function Environment.Functions:ResetSettings()
-    Environment.Settings = {
-        Enabled = true,
-        TeamCheck = false,
-        AliveCheck = true,
-        WallCheck = false,
-        Sensitivity = 0,
-        ThirdPerson = false,
-        ThirdPersonSensitivity = 3,
-        TriggerKey = "MouseButton2",
-        Toggle = false,
-        LockPart = "Head"
-    }
-    Environment.FOVSettings = {
-        Enabled = true,
-        Visible = true,
-        Amount = 90,
-        Color = Color3.fromRGB(255, 255, 255),
-        LockedColor = Color3.fromRGB(255, 70, 70),
-        Transparency = 0.5,
-        Sides = 60,
-        Thickness = 1,
-        Filled = false
-    }
-end
-
-Load()
-
--- BLADE BALL AYARLARI
-local BladeBall = {
-    AutoParry = false,
-    ParryDistance = 35,
-    ParryTiming = 0.45,
-    SmartParry = false,
-    AutoSpam = false,
-    SpamDelay = 0.08,
-    HitboxExpander = false,
-    HitboxSize = 15,
-    AutoDodge = false,
-    DodgeDistance = 12,
-    BallESP = false,
-    NoParticles = false,
-    AutoEquip = false,
-    AntiFling = false,
-    AntiSlow = false,
-    
-    ParryDebounce = false,
-    DodgeDebounce = false,
-    lastSpamTick = 0,
-    BallHighlight = nil,
-    BallBillboard = nil,
-    ParryRemote = nil,
-    ESPCache = {},
-    OrigHitboxes = {},
-    Connections = {},
-}
-
-local ESPObjects={}
-
-local RP_AIM=RaycastParams.new() 
-RP_AIM.FilterType=Enum.RaycastFilterType.Exclude
-local function LOS(o,t) RP_AIM.FilterDescendantsInstances={LP.Character or {}} local r=WS:Raycast(o,t-o,RP_AIM) return not r or r.Distance>=(t-o).Magnitude*0.95 end
-
-local function gc() return LP.Character end
-local function ghrp() local c=gc() return c and c:FindFirstChild("HumanoidRootPart") end
-local function ghum() local c=gc() return c and c:FindFirstChildOfClass("Humanoid") end
-local function rc(p,r) Instance.new("UICorner",p).CornerRadius=UDim.new(0,r or 6) end
-local function mkb(p,t,col) local b=Instance.new("TextButton") b.BackgroundColor3=col or C.Ac b.BorderSizePixel=0 b.Size=UDim2.new(1,0,0,28) b.Font=Enum.Font.Gotham b.TextColor3=C.W b.TextSize=11 b.AutoButtonColor=false b.Text=t b.Parent=p rc(b) return b end
-local function hfx(b,ba,ho) b.MouseEnter:Connect(function() TweenService:Create(b,TweenInfo.new(0.08),{BackgroundColor3=ho}):Play() end) b.MouseLeave:Connect(function() TweenService:Create(b,TweenInfo.new(0.08),{BackgroundColor3=ba}):Play() end) end
-local function sep(p,o) local s=Instance.new("Frame") s.Parent=p s.BackgroundColor3=C.Ac s.BorderSizePixel=0 s.Size=UDim2.new(1,0,0,1) s.LayoutOrder=o end
-local function lbl(p,t,o) local l=Instance.new("TextLabel") l.Parent=p l.BackgroundTransparency=1 l.Size=UDim2.new(1,0,0,18) l.Font=Enum.Font.GothamBold l.TextColor3=C.D l.TextSize=10 l.TextXAlignment=Enum.TextXAlignment.Left l.Text="  "..t l.LayoutOrder=o end
-local function mscr(p,pos,sz) local sf=Instance.new("ScrollingFrame") sf.Parent=p sf.Active=true sf.BackgroundColor3=C.Bg2 sf.BorderSizePixel=0 sf.Position=pos sf.Size=sz sf.ScrollBarThickness=3 sf.ScrollBarImageColor3=C.Ac sf.CanvasSize=UDim2.new(0,0,0,0) rc(sf,8) local pd=Instance.new("UIPadding",sf) pd.PaddingTop=UDim.new(0,4) pd.PaddingBottom=UDim.new(0,4) pd.PaddingLeft=UDim.new(0,4) pd.PaddingRight=UDim.new(0,4) local l=Instance.new("UIListLayout",sf) l.SortOrder=Enum.SortOrder.LayoutOrder l.Padding=UDim.new(0,2) l:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function() sf.CanvasSize=UDim2.new(0,0,0,l.AbsoluteContentSize.Y+8) end) return sf end
-local sliders={}
-local function mkSlider(p,name,mn,mx,def,o) local f=Instance.new("Frame") f.Parent=p f.BackgroundColor3=C.Bg f.BorderSizePixel=0 f.Size=UDim2.new(1,0,0,34) f.LayoutOrder=o rc(f) local lb=Instance.new("TextLabel",f) lb.BackgroundTransparency=1 lb.Position=UDim2.new(0,8,0,0) lb.Size=UDim2.new(1,-16,0,16) lb.Font=Enum.Font.Gotham lb.TextColor3=C.D lb.TextSize=10 lb.TextXAlignment=Enum.TextXAlignment.Left lb.Text=name..": "..def local bg=Instance.new("Frame",f) bg.BackgroundColor3=C.Bg2 bg.BorderSizePixel=0 bg.Position=UDim2.new(0,8,0,19) bg.Size=UDim2.new(1,-16,0,10) rc(bg,4) local fl=Instance.new("Frame",bg) fl.BackgroundColor3=C.Ac fl.BorderSizePixel=0 fl.Size=UDim2.new(math.clamp((def-mn)/(mx-mn),0,1),0,1,0) rc(fl,4) local s={bg=bg,fill=fl,label=lb,name=name,min=mn,max=mx,val=def,dragging=false,cb=nil} bg.InputBegan:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then s.dragging=true end end) table.insert(sliders,s) return s end
-local allToggles={}
-local function mkToggle(p,name,o,cfgK) local f=Instance.new("Frame") f.Parent=p f.BackgroundColor3=C.Bg f.BorderSizePixel=0 f.Size=UDim2.new(1,0,0,26) f.LayoutOrder=o rc(f) local lb=Instance.new("TextLabel",f) lb.BackgroundTransparency=1 lb.Position=UDim2.new(0,8,0,0) lb.Size=UDim2.new(1,-100,1,0) lb.Font=Enum.Font.Gotham lb.TextColor3=C.W lb.TextSize=11 lb.TextXAlignment=Enum.TextXAlignment.Left lb.Text=name local kl=Instance.new("TextLabel",f) kl.BackgroundTransparency=1 kl.Position=UDim2.new(1,-96,0,0) kl.Size=UDim2.new(0,46,1,0) kl.Font=Enum.Font.Gotham kl.TextColor3=C.D kl.TextSize=8 kl.TextXAlignment=Enum.TextXAlignment.Right local ks=cfgK and CFG[cfgK] or "" kl.Text=ks~="" and "["..ks.."]" or "" local b=Instance.new("TextButton",f) b.BackgroundColor3=C.Bg2 b.BorderSizePixel=0 b.Position=UDim2.new(1,-44,0,3) b.Size=UDim2.new(0,36,0,20) b.Font=Enum.Font.GothamBold b.TextColor3=C.D b.TextSize=9 b.Text="OFF" b.AutoButtonColor=false rc(b,4) local st=false local cb=nil local function tog() st=not st b.Text=st and "ON" or "OFF" TweenService:Create(b,TweenInfo.new(0.12),{BackgroundColor3=st and C.Ac or C.Bg2}):Play() b.TextColor3=st and C.W or C.D if cb then cb(st) end end b.MouseButton1Click:Connect(tog) local obj={set=function(s) if s~=st then tog() end end,get=function() return st end,on=function(c) cb=c end,toggle=tog,cfgKey=cfgK,updateKeyLabel=function() local k=cfgK and CFG[cfgK] or "" kl.Text=k~="" and "["..k.."]" or "" end} table.insert(allToggles,obj) return obj end
-
-print("✅ RYSA CHEAT - BAŞLANDI")
-print("Menü: RightShift (Sağ Shift)")
-
---// AIMBOT SISTEMI (YENİ)
-local select = select
-local pcall, getgenv, next, Vector2, mathclamp, type, mousemoverel = select(1, pcall, getgenv, next, Vector2.new, math.clamp, type, mousemoverel or (Input and Input.MouseMove))
-
-pcall(function()
-    getgenv().Aimbot.Functions:Exit()
+local Home = Rysa:Tab("Home")
+Home:Button("Test Button", function()
+    print("Test")
 end)
-
-getgenv().Aimbot = {}
-local Environment = getgenv().Aimbot
-
-local RunService2 = game:GetService("RunService")
-local UserInputService2 = game:GetService("UserInputService")
-local TweenService2 = game:GetService("TweenService")
-local Players2 = game:GetService("Players")
-local Camera2 = workspace.CurrentCamera
-local LocalPlayer2 = Players2.LocalPlayer
-
-local RequiredDistance, Typing, Running, Animation, ServiceConnections = 2000, false, false, nil, {}
-
-Environment.Settings = {
-    Enabled = true,
-    TeamCheck = false,
-    AliveCheck = true,
-    WallCheck = false,
-    Sensitivity = 0,
-    ThirdPerson = false,
-    ThirdPersonSensitivity = 3,
-    TriggerKey = "MouseButton2",
-    Toggle = false,
-    LockPart = "Head"
-}
-
-Environment.FOVSettings = {
-    Enabled = true,
-    Visible = true,
-    Amount = 90,
-    Color = Color3.fromRGB(255, 255, 255),
-    LockedColor = Color3.fromRGB(255, 70, 70),
-    Transparency = 0.5,
-    Sides = 60,
-    Thickness = 1,
-    Filled = false
-}
-
-Environment.FOVCircle = Drawing.new("Circle")
-
-local function CancelLock()
-    Environment.Locked = nil
-    if Animation then Animation:Cancel() end
-    Environment.FOVCircle.Color = Environment.FOVSettings.Color
-end
-
-local function GetClosestPlayer()
-    if not Environment.Locked then
-        RequiredDistance = (Environment.FOVSettings.Enabled and Environment.FOVSettings.Amount or 2000)
-        for _, v in next, Players2:GetPlayers() do
-            if v ~= LocalPlayer2 then
-                if v.Character and v.Character:FindFirstChild(Environment.Settings.LockPart) and v.Character:FindFirstChildOfClass("Humanoid") then
-                    if Environment.Settings.TeamCheck and v.Team == LocalPlayer2.Team then continue end
-                    if Environment.Settings.AliveCheck and v.Character:FindFirstChildOfClass("Humanoid").Health <= 0 then continue end
-                    if Environment.Settings.WallCheck and #(Camera2:GetPartsObscuringTarget({v.Character[Environment.Settings.LockPart].Position}, v.Character:GetDescendants())) > 0 then continue end
-                    
-                    local Vector, OnScreen = Camera2:WorldToViewportPoint(v.Character[Environment.Settings.LockPart].Position)
-                    local Distance = (Vector2(UserInputService2:GetMouseLocation().X, UserInputService2:GetMouseLocation().Y) - Vector2(Vector.X, Vector.Y)).Magnitude
-                    if Distance < RequiredDistance and OnScreen then
-                        RequiredDistance = Distance
-                        Environment.Locked = v
-                    end
-                end
-            end
-        end
-    else
-        if (Vector2(UserInputService2:GetMouseLocation().X, UserInputService2:GetMouseLocation().Y) - Vector2(Camera2:WorldToViewportPoint(Environment.Locked.Character[Environment.Settings.LockPart].Position).X, Camera2:WorldToViewportPoint(Environment.Locked.Character[Environment.Settings.LockPart].Position).Y)).Magnitude > RequiredDistance then
-            CancelLock()
-        end
-    end
-end
-
-ServiceConnections.TypingStartedConnection = UserInputService2.TextBoxFocused:Connect(function()
-    Typing = true
-end)
-
-ServiceConnections.TypingEndedConnection = UserInputService2.TextBoxFocusReleased:Connect(function()
-    Typing = false
-end)
-
-local function Load()
-    ServiceConnections.RenderSteppedConnection = RunService2.RenderStepped:Connect(function()
-        if Environment.FOVSettings.Enabled and Environment.Settings.Enabled then
-            Environment.FOVCircle.Radius = Environment.FOVSettings.Amount
-            Environment.FOVCircle.Thickness = Environment.FOVSettings.Thickness
-            Environment.FOVCircle.Filled = Environment.FOVSettings.Filled
-            Environment.FOVCircle.NumSides = Environment.FOVSettings.Sides
-            Environment.FOVCircle.Color = Environment.FOVSettings.Color
-            Environment.FOVCircle.Transparency = Environment.FOVSettings.Transparency
-            Environment.FOVCircle.Visible = Environment.FOVSettings.Visible
-            Environment.FOVCircle.Position = Vector2(UserInputService2:GetMouseLocation().X, UserInputService2:GetMouseLocation().Y)
-        else
-            Environment.FOVCircle.Visible = false
-        end
-        
-        if Running and Environment.Settings.Enabled then
-            GetClosestPlayer()
-            if Environment.Locked then
-                if Environment.Settings.ThirdPerson then
-                    Environment.Settings.ThirdPersonSensitivity = mathclamp(Environment.Settings.ThirdPersonSensitivity, 0.1, 5)
-                    local Vector = Camera2:WorldToViewportPoint(Environment.Locked.Character[Environment.Settings.LockPart].Position)
-                    mousemoverel((Vector.X - UserInputService2:GetMouseLocation().X) * Environment.Settings.ThirdPersonSensitivity, (Vector.Y - UserInputService2:GetMouseLocation().Y) * Environment.Settings.ThirdPersonSensitivity)
-                elseif Environment.Settings.Sensitivity > 0 then
-                    Animation = TweenService2:Create(Camera2, TweenInfo.new(Environment.Settings.Sensitivity, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(Camera2.CFrame.Position, Environment.Locked.Character[Environment.Settings.LockPart].Position)})
-                    Animation:Play()
-                else
-                    Camera2.CFrame = CFrame.new(Camera2.CFrame.Position, Environment.Locked.Character[Environment.Settings.LockPart].Position)
-                end
-            end
-            Environment.FOVCircle.Color = Environment.FOVSettings.LockedColor
-        end
-    end)
-    
-    ServiceConnections.InputBeganConnection = UserInputService2.InputBegan:Connect(function(Input)
-        if not Typing then
-            pcall(function()
-                if Input.KeyCode == Enum.KeyCode[Environment.Settings.TriggerKey] then
-                    if Environment.Settings.Toggle then
-                        Running = not Running
-                        if not Running then
-                            CancelLock()
-                        end
-                    else
-                        Running = true
-                    end
-                end
-            end)
-            pcall(function()
-                if Input.UserInputType == Enum.UserInputType[Environment.Settings.TriggerKey] then
-                    if Environment.Settings.Toggle then
-                        Running = not Running
-                        if not Running then
-                            CancelLock()
-                        end
-                    else
-                        Running = true
-                    end
-                end
-            end)
-        end
-    end)
-    
-    ServiceConnections.InputEndedConnection = UserInputService2.InputEnded:Connect(function(Input)
-        if not Typing then
-            if not Environment.Settings.Toggle then
-                pcall(function()
-                    if Input.KeyCode == Enum.KeyCode[Environment.Settings.TriggerKey] then
-                        Running = false; CancelLock()
-                    end
-                end)
-                pcall(function()
-                    if Input.UserInputType == Enum.UserInputType[Environment.Settings.TriggerKey] then
-                        Running = false; CancelLock()
-                    end
-                end)
-            end
-        end
-    end)
-end
-
-Environment.Functions = {}
-
-function Environment.Functions:Exit()
-    for _, v in next, ServiceConnections do
-        v:Disconnect()
-    end
-    if Environment.FOVCircle.Remove then Environment.FOVCircle:Remove() end
-    getgenv().Aimbot.Functions = nil
-    getgenv().Aimbot = nil
-    Load = nil; GetClosestPlayer = nil; CancelLock = nil
-end
-
-function Environment.Functions:Restart()
-    for _, v in next, ServiceConnections do
-        v:Disconnect()
-    end
-    Load()
-end
-
-function Environment.Functions:ResetSettings()
-    Environment.Settings = {
-        Enabled = true,
-        TeamCheck = false,
-        AliveCheck = true,
-        WallCheck = false,
-        Sensitivity = 0,
-        ThirdPerson = false,
-        ThirdPersonSensitivity = 3,
-        TriggerKey = "MouseButton2",
-        Toggle = false,
-        LockPart = "Head"
-    }
-    Environment.FOVSettings = {
-        Enabled = true,
-        Visible = true,
-        Amount = 90,
-        Color = Color3.fromRGB(255, 255, 255),
-        LockedColor = Color3.fromRGB(255, 70, 70),
-        Transparency = 0.5,
-        Sides = 60,
-        Thickness = 1,
-        Filled = false
-    }
-end
-
-Load()
-
---// GAME LOGIC FONKSİYONLARI
-
-local Fly={Active=false,Speed=50,Keybind="F5",Connection=nil,BodyVelocity=nil}
-local Noclip={Active=false,Speed=50,Keybind="N",Connection=nil}
-local Freecam={Active=false,Speed=50,Keybind="F6",Connection=nil,OriginalCFrame=nil}
-local GodMode={Active=false,Keybind="G"}
-local ESP={Active=false,Keybind="",ESPObjects={}}
-local Fling={Active=false,Power=100,Keybind="T"}
-local AntiVoid={Active=false,Keybind=""}
-local Fullbright={Active=false,Keybind=""}
-local NoFog={Active=false,Keybind=""}
-local AntiAFK={Active=false,Keybind=""}
-local AntiSlow={Active=false,Keybind=""}
-
-local function startFly()
-    if Fly.Active then return end
-    Fly.Active=true
-    local hrp=ghrp()
-    if not hrp then return end
-    
-    Fly.BodyVelocity=Instance.new("BodyVelocity")
-    Fly.BodyVelocity.Velocity=Vector3.new(0,0,0)
-    Fly.BodyVelocity.MaxForce=Vector3.new(math.huge,math.huge,math.huge)
-    Fly.BodyVelocity.Parent=hrp
-    
-    Fly.Connection=RunService.RenderStepped:Connect(function()
-        if not Fly.Active or not ghrp() then return end
-        local moveDir=Vector3.new(0,0,0)
-        if UIS:IsKeyDown(Enum.KeyCode.W) then moveDir=moveDir+cam.CFrame.LookVector end
-        if UIS:IsKeyDown(Enum.KeyCode.A) then moveDir=moveDir-cam.CFrame.RightVector end
-        if UIS:IsKeyDown(Enum.KeyCode.S) then moveDir=moveDir-cam.CFrame.LookVector end
-        if UIS:IsKeyDown(Enum.KeyCode.D) then moveDir=moveDir+cam.CFrame.RightVector end
-        if UIS:IsKeyDown(Enum.KeyCode.Space) then moveDir=moveDir+Vector3.new(0,1,0) end
-        if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then moveDir=moveDir-Vector3.new(0,1,0) end
-        if moveDir.Magnitude>0 then moveDir=moveDir.Unit end
-        Fly.BodyVelocity.Velocity=moveDir*Fly.Speed
-    end)
-end
-
-local function stopFly()
-    Fly.Active=false
-    if Fly.Connection then Fly.Connection:Disconnect() end
-    if Fly.BodyVelocity then Fly.BodyVelocity:Destroy() end
-    Fly.BodyVelocity=nil
-end
-
-local function startNoclip()
-    if Noclip.Active then return end
-    Noclip.Active=true
-    local c=gc()
-    if not c then return end
-    for _,v in pairs(c:GetDescendants()) do
-        if v:IsA("BasePart") then v.CanCollide=false end
-    end
-    Noclip.Connection=RunService.RenderStepped:Connect(function()
-        if not Noclip.Active or not gc() then return end
-        for _,v in pairs(gc():GetDescendants()) do
-            if v:IsA("BasePart") then v.CanCollide=false end
-        end
-    end)
-end
-
-local function stopNoclip()
-    Noclip.Active=false
-    if Noclip.Connection then Noclip.Connection:Disconnect() end
-    local c=gc()
-    if c then
-        for _,v in pairs(c:GetDescendants()) do
-            if v:IsA("BasePart") then v.CanCollide=true end
-        end
-    end
-end
-
-local function startFreecam()
-    if Freecam.Active then return end
-    Freecam.Active=true
-    Freecam.OriginalCFrame=cam.CFrame
-    
-    Freecam.Connection=RunService.RenderStepped:Connect(function()
-        if not Freecam.Active then return end
-        local moveDir=Vector3.new(0,0,0)
-        if UIS:IsKeyDown(Enum.KeyCode.W) then moveDir=moveDir+cam.CFrame.LookVector end
-        if UIS:IsKeyDown(Enum.KeyCode.A) then moveDir=moveDir-cam.CFrame.RightVector end
-        if UIS:IsKeyDown(Enum.KeyCode.S) then moveDir=moveDir-cam.CFrame.LookVector end
-        if UIS:IsKeyDown(Enum.KeyCode.D) then moveDir=moveDir+cam.CFrame.RightVector end
-        if UIS:IsKeyDown(Enum.KeyCode.Space) then moveDir=moveDir+Vector3.new(0,1,0) end
-        if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then moveDir=moveDir-Vector3.new(0,1,0) end
-        if moveDir.Magnitude>0 then moveDir=moveDir.Unit end
-        cam.CFrame=cam.CFrame+moveDir*Freecam.Speed*0.016
-    end)
-end
-
-local function stopFreecam()
-    Freecam.Active=false
-    if Freecam.Connection then Freecam.Connection:Disconnect() end
-    if Freecam.OriginalCFrame then cam.CFrame=Freecam.OriginalCFrame end
-end
-
-local function startGodMode()
-    if GodMode.Active then return end
-    GodMode.Active=true
-    local hum=ghum()
-    if hum then hum.MaxHealth=math.huge hum.Health=math.huge end
-end
-
-local function stopGodMode()
-    GodMode.Active=false
-    local hum=ghum()
-    if hum then hum.MaxHealth=100 hum.Health=100 end
-end
-
-local function startESP()
-    if ESP.Active then return end
-    ESP.Active=true
-    for _,v in pairs(Players:GetPlayers()) do
-        if v~=LP and v.Character then
-            local hrp=v.Character:FindFirstChild("HumanoidRootPart")
-            if hrp then
-                local bb=Instance.new("BillboardGui")
-                bb.Size=UDim2.new(4,0,5,0)
-                bb.MaxDistance=math.huge
-                bb.Parent=hrp
-                local tl=Instance.new("TextLabel")
-                tl.BackgroundTransparency=1
-                tl.Size=UDim2.new(1,0,1,0)
-                tl.TextColor3=Color3.fromRGB(255,0,0)
-                tl.TextSize=14
-                tl.Text=v.Name
-                tl.Parent=bb
-                table.insert(ESP.ESPObjects,{bb=bb,player=v})
-            end
-        end
-    end
-end
-
-local function stopESP()
-    ESP.Active=false
-    for _,obj in pairs(ESP.ESPObjects) do
-        if obj.bb then obj.bb:Destroy() end
-    end
-    ESP.ESPObjects={}
-end
-
-local function flingPlayer(target)
-    if not target or not target.Character then return end
-    local hrp=target.Character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        local bv=Instance.new("BodyVelocity")
-        bv.Velocity=Vector3.new(math.random(-100,100),math.random(50,100),math.random(-100,100))
-        bv.MaxForce=Vector3.new(math.huge,math.huge,math.huge)
-        bv.Parent=hrp
-        game:GetService("Debris"):AddItem(bv,0.1)
-    end
-end
-
---// MENU UI
-
-local mainFrame=Instance.new("Frame")
-mainFrame.Name="MainMenu"
-mainFrame.BackgroundColor3=C.Bg
-mainFrame.BorderSizePixel=0
-mainFrame.Size=UDim2.new(0,350,0,400)
-mainFrame.Position=UDim2.new(0.5,-175,0.5,-200)
-mainFrame.Visible=false
-mainFrame.Parent=gui
-rc(mainFrame,10)
-
-local titleBar=Instance.new("Frame",mainFrame)
-titleBar.BackgroundColor3=C.Bg2
-titleBar.BorderSizePixel=0
-titleBar.Size=UDim2.new(1,0,0,35)
-rc(titleBar,10)
-
-local titleLabel=Instance.new("TextLabel",titleBar)
-titleLabel.BackgroundTransparency=1
-titleLabel.Size=UDim2.new(1,-40,1,0)
-titleLabel.Font=Enum.Font.GothamBold
-titleLabel.TextColor3=C.W
-titleLabel.TextSize=14
-titleLabel.Text="RYSA CHEAT"
-
-local closeBtn=Instance.new("TextButton",titleBar)
-closeBtn.BackgroundColor3=C.R
-closeBtn.BorderSizePixel=0
-closeBtn.Position=UDim2.new(1,-30,0,5)
-closeBtn.Size=UDim2.new(0,25,0,25)
-closeBtn.Font=Enum.Font.GothamBold
-closeBtn.TextColor3=C.W
-closeBtn.TextSize=12
-closeBtn.Text="X"
-closeBtn.AutoButtonColor=false
-rc(closeBtn,4)
-
-closeBtn.MouseButton1Click:Connect(function()
-    mainFrame.Visible=false
-end)
-
-local tabContainer=Instance.new("Frame",mainFrame)
-tabContainer.BackgroundColor3=C.Bg
-tabContainer.BorderSizePixel=0
-tabContainer.Position=UDim2.new(0,0,0,35)
-tabContainer.Size=UDim2.new(1,0,0,30)
-
-local tabLayout=Instance.new("UIListLayout",tabContainer)
-tabLayout.FillDirection=Enum.FillDirection.Horizontal
-tabLayout.SortOrder=Enum.SortOrder.LayoutOrder
-tabLayout.Padding=UDim.new(0,2)
-
-local tabs={"MOVE","COMBAT","AIMBOT","BLADE BALL","PLAYERS","TOOLS","EXT","CONFIG"}
-local tabButtons={}
-local contentFrames={}
-
-for i,tabName in pairs(tabs) do
-    local tabBtn=Instance.new("TextButton",tabContainer)
-    tabBtn.BackgroundColor3=C.Bg2
-    tabBtn.BorderSizePixel=0
-    tabBtn.Size=UDim2.new(0,40,1,0)
-    tabBtn.Font=Enum.Font.Gotham
-    tabBtn.TextColor3=C.D
-    tabBtn.TextSize=9
-    tabBtn.Text=tabName
-    tabBtn.AutoButtonColor=false
-    tabBtn.LayoutOrder=i
-    rc(tabBtn,4)
-    
-    local contentFrame=mscr(mainFrame,UDim2.new(0,0,0,65),UDim2.new(1,0,1,-65))
-    contentFrame.Name=tabName
-    contentFrame.Visible=(i==1)
-    
-    tabBtn.MouseButton1Click:Connect(function()
-        for _,f in pairs(contentFrames) do f.Visible=false end
-        contentFrame.Visible=true
-        for _,b in pairs(tabButtons) do
-            TweenService:Create(b,TweenInfo.new(0.1),{BackgroundColor3=C.Bg2,TextColor3=C.D}):Play()
-        end
-        TweenService:Create(tabBtn,TweenInfo.new(0.1),{BackgroundColor3=C.Ac,TextColor3=C.W}):Play()
-    end)
-    
-    hfx(tabBtn,C.Bg2,C.Ac)
-    table.insert(tabButtons,tabBtn)
-    table.insert(contentFrames,contentFrame)
-end
-
---// MOVE TAB
-local moveTab=contentFrames[1]
-lbl(moveTab,"MOVEMENT",1)
-sep(moveTab,2)
-mkToggle(moveTab,"Fly",3,"flyKey"):on(function(s) if s then startFly() else stopFly() end end)
-mkToggle(moveTab,"Noclip",4,"noclipKey"):on(function(s) if s then startNoclip() else stopNoclip() end end)
-mkToggle(moveTab,"Freecam",5,"freecamKey"):on(function(s) if s then startFreecam() else stopFreecam() end end)
-mkSlider(moveTab,"Speed",10,200,50,6).cb=function(v) Fly.Speed=v Noclip.Speed=v Freecam.Speed=v end
-
---// COMBAT TAB
-local combatTab=contentFrames[2]
-lbl(combatTab,"COMBAT",1)
-sep(combatTab,2)
-mkToggle(combatTab,"God Mode",3,"godKey"):on(function(s) if s then startGodMode() else stopGodMode() end end)
-mkToggle(combatTab,"Anti Void",4,"antiVoidKey"):on(function(s) AntiVoid.Active=s end)
-mkToggle(combatTab,"Anti Slow",5,"antiSlowKey"):on(function(s) AntiSlow.Active=s end)
-
---// AIMBOT TAB
-local aimbotTab=contentFrames[3]
-lbl(aimbotTab,"AIMBOT",1)
-sep(aimbotTab,2)
-mkToggle(aimbotTab,"Aimbot Enabled",3):on(function(s) Environment.Settings.Enabled=s end)
-mkToggle(aimbotTab,"FOV Visible",4):on(function(s) Environment.FOVSettings.Visible=s end)
-mkSlider(aimbotTab,"FOV Size",10,500,90,5).cb=function(v) Environment.FOVSettings.Amount=v end
-mkSlider(aimbotTab,"Sensitivity",0,1,0,6).cb=function(v) Environment.Settings.Sensitivity=v end
-
---// BLADE BALL TAB
-local bladeBallTab=contentFrames[4]
-lbl(bladeBallTab,"BLADE BALL",1)
-sep(bladeBallTab,2)
-mkToggle(bladeBallTab,"Auto Parry",3):on(function(s) BladeBall.AutoParry=s end)
-mkToggle(bladeBallTab,"Smart Parry",4):on(function(s) BladeBall.SmartParry=s end)
-mkToggle(bladeBallTab,"Auto Spam",5):on(function(s) BladeBall.AutoSpam=s end)
-mkToggle(bladeBallTab,"Ball ESP",6):on(function(s) BladeBall.BallESP=s end)
-
---// PLAYERS TAB
-local playersTab=contentFrames[5]
-lbl(playersTab,"PLAYERS",1)
-sep(playersTab,2)
-mkToggle(playersTab,"ESP",7):on(function(s) if s then startESP() else stopESP() end end)
-local flingBtn=mkb(playersTab,"Fling Closest",8)
-flingBtn.MouseButton1Click:Connect(function()
-    local closest=nil
-    local closestDist=math.huge
-    for _,v in pairs(Players:GetPlayers()) do
-        if v~=LP and v.Character then
-            local dist=(v.Character:FindFirstChild("HumanoidRootPart").Position-ghrp().Position).Magnitude
-            if dist<closestDist then closestDist=dist closest=v end
-        end
-    end
-    if closest then flingPlayer(closest) end
-end)
-
---// TOOLS TAB
-local toolsTab=contentFrames[6]
-lbl(toolsTab,"TOOLS",1)
-sep(toolsTab,2)
-mkToggle(toolsTab,"Fullbright",3,"fullbrightKey"):on(function(s) Fullbright.Active=s end)
-mkToggle(toolsTab,"No Fog",4,"noFogKey"):on(function(s) NoFog.Active=s end)
-
---// EXT TAB
-local extTab=contentFrames[7]
-lbl(extTab,"EXTENSIONS",1)
-sep(extTab,2)
-mkToggle(extTab,"Anti AFK",3,"antiAfkKey"):on(function(s) AntiAFK.Active=s end)
-
---// CONFIG TAB
-local configTab=contentFrames[8]
-lbl(configTab,"CONFIG",1)
-sep(configTab,2)
-local saveBtn=mkb(configTab,"Save Config",3)
-saveBtn.MouseButton1Click:Connect(function() saveCFG(CFG) end)
-local loadBtn=mkb(configTab,"Load Config",4)
-loadBtn.MouseButton1Click:Connect(function() CFG=loadCFG() end)
-local resetBtn=mkb(configTab,"Reset All",5)
-resetBtn.MouseButton1Click:Connect(function() CFG=loadCFG() end)
-
---// MENU TOGGLE
-UIS.InputBegan:Connect(function(input,gp)
-    if gp then return end
-    if input.KeyCode==Enum.KeyCode.RightShift then
-        mainFrame.Visible=not mainFrame.Visible
-    end
-end)
-
---// SLIDER LOGIC
-RunService.RenderStepped:Connect(function()
-    for _,s in pairs(sliders) do
-        if s.dragging then
-            local mouse=LP:GetMouse()
-            local relX=math.clamp(mouse.X-s.bg.AbsolutePosition.X,0,s.bg.AbsoluteSize.X)
-            local pct=relX/s.bg.AbsoluteSize.X
-            s.val=math.floor(s.min+pct*(s.max-s.min))
-            s.fill.Size=UDim2.new(pct,0,1,0)
-            s.label.Text=s.name..": "..s.val
-            if s.cb then s.cb(s.val) end
-        end
-    end
-end)
-
-UIS.InputEnded:Connect(function(input,gp)
-    if input.UserInputType==Enum.UserInputType.MouseButton1 then
-        for _,s in pairs(sliders) do s.dragging=false end
-    end
+Home:Toggle("Test Toggle", false, function(state)
+    print("Toggle:", state)
 end)
 
 print("✅ RYSA CHEAT - BAŞLANDI")
-print("Menü: RightShift (Sağ Shift)")
+print("Menü: End tuşu")
