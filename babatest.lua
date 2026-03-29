@@ -1,7 +1,6 @@
 --[[
 RYSA CHEAT - FULL EDITION
 Menü: End tuşu
-Tüm özellikler dahil
 ]]
 
 if game.CoreGui:FindFirstChild("RysaUI") then game.CoreGui:FindFirstChild("RysaUI"):Destroy() end
@@ -15,7 +14,6 @@ local WS=game:GetService("Workspace")
 local Lighting=game:GetService("Lighting")
 local cam=WS.CurrentCamera
 
--- GLOBALS
 local flying,ncOn,godOn,espOn,fcOn,avOn,fbOn,nfOn,aafkOn,aslowOn,spinOn,hitboxOn=false,false,false,false,false,false,false,false,false,false,false,false
 local flyBV,flyBG,flyC,ncC,godC,espC,fcC,avC,fbC,nfC,aslowC,spinC,hitboxC
 local keys={}
@@ -28,22 +26,14 @@ local fcYaw,fcPitch=0,0
 local fcPos=Vector3.zero
 local origFog,origAmb
 
--- AIMBOT
 local AIM={on=false,fov=150,showFov=true,smooth=5,pred=0.15,key="MouseButton2",part="Head",team=true,wall=true}
 local FC=Drawing.new("Circle")
 FC.Radius=AIM.fov FC.Color=Color3.fromRGB(255,255,255) FC.Thickness=1.5 FC.Filled=false FC.Visible=false FC.NumSides=60
 
--- BLADE BALL
 local BB={AutoParry=false,ParryDist=35,ParryTime=0.45,SmartParry=false,AutoSpam=false,SpamDelay=0.08,HitboxExp=false,HitboxSize=15,AutoDodge=false,DodgeDist=12,BallESP=false,NoParticles=false,AutoEquip=false,AntiFling=false,AntiSlow=false,ParryDebounce=false,DodgeDebounce=false,lastSpam=0,BallHL=nil,BallBB=nil}
 
--- FLING
-local FL={busy=false,allOn=false,stopFlag=false,touchOn=false,followOn=false,followTarget=nil,savedFPDH=nil}
+local FL={busy=false,allOn=false,stopFlag=false,touchOn=false}
 pcall(function() FL.savedFPDH=WS.FallenPartsDestroyHeight end)
-
--- FUCK
-local fuckActive=false
-local fuckTarget=nil
-local fuckConn=nil
 
 local function gc() return LP.Character end
 local function ghrp() local c=gc() return c and c:FindFirstChild("HumanoidRootPart") end
@@ -97,7 +87,7 @@ av.Parent=pf av.BackgroundColor3=C.Hv av.Position=UDim2.new(0,10,0,10) av.Size=U
 local avc=Instance.new("UICorner") avc.CornerRadius=UDim.new(0,6) avc.Parent=av
 
 local pn=Instance.new("TextLabel")
-pn.Parent=pf pn.BackgroundTransparency=1 pn.Position=UDim2.new(0,70,0,10) pn.Size=UDim2.new(0,100,0,20) pn.Font=Enum.Font.GothamBold pn.Text=LP.Name pn.TextColor3=C.Tx pn.TextSize=12 pn.TextXAlignment=Enum.TextXAlignment.Left
+pn.Parent=pf pn.BackgroundTransparency=1 pn.Position=UDim2.new(0,70,0,10) pn.Size=UDim2.new(0,100,0,20) pn.Font=Enum.Font.GothamBold pn.Text=LP.Name pn.TextColor3=C.Tx pn.TextSize=12 pn.TextXAlignment=Enum.TextXAlignment.Left pn.TextScaled=true
 
 local ps=Instance.new("TextLabel")
 ps.Parent=pf ps.BackgroundTransparency=1 ps.Position=UDim2.new(0,70,0,32) ps.Size=UDim2.new(0,100,0,15) ps.Font=Enum.Font.Gotham ps.Text="Premium • Lifetime" ps.TextColor3=C.Ac ps.TextSize=10 ps.TextXAlignment=Enum.TextXAlignment.Left
@@ -107,7 +97,7 @@ cf.Name="Content" cf.Parent=mf cf.BackgroundColor3=C.Bg cf.Position=UDim2.new(0,
 local cfc=Instance.new("UICorner") cfc.CornerRadius=UDim.new(0,12) cfc.Parent=cf
 
 local cs=Instance.new("ScrollingFrame")
-cs.Name="Scroll" cs.Parent=cf cs.BackgroundTransparency=1 cs.Size=UDim2.new(1,0,1,0) cs.ScrollBarThickness=4 cs.ScrollBarImageColor3=C.P cs.CanvasSize=UDim2.new(0,0,0,0)
+cs.Name="Scroll" cs.Parent=cf cs.BackgroundTransparency=1 cs.Size=UDim2.new(1,0,1,0) cs.ScrollBarThickness=4 cs.ScrollBarImageColor3=C.P cs.CanvasSize=UDim2.new(0,0,0,0) cs.BorderSizePixel=0
 local cl=Instance.new("UIListLayout") cl.Parent=cs cl.SortOrder=Enum.SortOrder.LayoutOrder cl.Padding=UDim.new(0,12)
 local cp=Instance.new("UIPadding") cp.PaddingLeft=UDim.new(0,15) cp.PaddingRight=UDim.new(0,15) cp.PaddingTop=UDim.new(0,15) cp.PaddingBottom=UDim.new(0,15) cp.Parent=cs
 
@@ -158,10 +148,10 @@ local tgc=Instance.new("UICorner") tgc.CornerRadius=UDim.new(0,8) tgc.Parent=tg
 local tgg=Instance.new("UIGradient") tgg.Color=ColorSequence.new{ColorSequenceKeypoint.new(0,C.Sf),ColorSequenceKeypoint.new(1,Color3.fromRGB(25,25,40))} tgg.Parent=tg
 
 local lb=Instance.new("TextLabel")
-lb.Parent=tg lb.BackgroundTransparency=1 lb.Position=UDim2.new(0,15,0,10) lb.Size=UDim2.new(0,400,0,25) lb.Font=Enum.Font.Gotham lb.Text=t lb.TextColor3=C.Tx lb.TextSize=13 lb.TextXAlignment=Enum.TextXAlignment.Left
+lb.Parent=tg lb.BackgroundTransparency=1 lb.Position=UDim2.new(0,15,0,0) lb.Size=UDim2.new(0,550,1,0) lb.Font=Enum.Font.Gotham lb.Text=t lb.TextColor3=C.Tx lb.TextSize=13 lb.TextXAlignment=Enum.TextXAlignment.Left
 
 local sw=Instance.new("Frame")
-sw.Parent=tg sw.BackgroundColor3=C.Hv sw.Position=UDim2.new(0,620,0,12) sw.Size=UDim2.new(0,50,0,21) sw.BorderSizePixel=0
+sw.Parent=tg sw.BackgroundColor3=C.Hv sw.Position=UDim2.new(1,-60,0.5,-10.5) sw.Size=UDim2.new(0,50,0,21) sw.BorderSizePixel=0 sw.AnchorPoint=Vector2.new(0,0.5)
 local swc=Instance.new("UICorner") swc.CornerRadius=UDim.new(1,0) swc.Parent=sw
 
 local dt=Instance.new("Frame")
@@ -208,7 +198,6 @@ tabs[n]=items
 return items
 end
 
--- TABS
 local move=CrTab("Movement","🚀")
 local combat=CrTab("Combat","⚔️")
 local aim=CrTab("Aimbot","🎯")
@@ -216,50 +205,31 @@ local bb=CrTab("BladeBall","⚡")
 local plr=CrTab("Players","👥")
 local misc=CrTab("Misc","🔧")
 
--- MOVEMENT TAB
 move:Tog("Fly",false,function(s)
-if s then
-local hrp=ghrp() local hum=ghum()
-if not hrp or not hum then return end
-flying=true if not ncOn then ncOn=true end hum.PlatformStand=true
+if s then local hrp=ghrp() local hum=ghum() if not hrp or not hum then return end flying=true if not ncOn then ncOn=true end hum.PlatformStand=true
 flyBV=Instance.new("BodyVelocity") flyBV.MaxForce=Vector3.new(9e9,9e9,9e9) flyBV.Velocity=Vector3.zero flyBV.P=9000 flyBV.Parent=hrp
 flyBG=Instance.new("BodyGyro") flyBG.MaxTorque=Vector3.new(9e9,9e9,9e9) flyBG.D=200 flyBG.P=40000 flyBG.Parent=hrp
-flyC=RS.Heartbeat:Connect(function()
-if not flying then return end
-pcall(function()
-local cf=cam.CFrame local d=Vector3.zero
-if keys[Enum.KeyCode.W] then d=d+cf.LookVector end
-if keys[Enum.KeyCode.S] then d=d-cf.LookVector end
-if keys[Enum.KeyCode.A] then d=d-cf.RightVector end
-if keys[Enum.KeyCode.D] then d=d+cf.RightVector end
-if keys[Enum.KeyCode.Space] then d=d+Vector3.yAxis end
-if keys[Enum.KeyCode.LeftShift] then d=d-Vector3.yAxis end
-flyBV.Velocity=d.Magnitude>0 and d.Unit*flySpeed or Vector3.zero
-flyBG.CFrame=cf
+flyC=RS.Heartbeat:Connect(function() if not flying then return end pcall(function() local cf=cam.CFrame local d=Vector3.zero
+if keys[Enum.KeyCode.W] then d=d+cf.LookVector end if keys[Enum.KeyCode.S] then d=d-cf.LookVector end
+if keys[Enum.KeyCode.A] then d=d-cf.RightVector end if keys[Enum.KeyCode.D] then d=d+cf.RightVector end
+if keys[Enum.KeyCode.Space] then d=d+Vector3.yAxis end if keys[Enum.KeyCode.LeftShift] then d=d-Vector3.yAxis end
+flyBV.Velocity=d.Magnitude>0 and d.Unit*flySpeed or Vector3.zero flyBG.CFrame=cf end) end)
+else flying=false if flyC then flyC:Disconnect() flyC=nil end
+pcall(function() if flyBV then flyBV:Destroy() end if flyBG then flyBG:Destroy() end ghum().PlatformStand=false end) end
 end)
-end)
-else
-flying=false if flyC then flyC:Disconnect() flyC=nil end
-pcall(function() if flyBV then flyBV:Destroy() end if flyBG then flyBG:Destroy() end ghum().PlatformStand=false end)
-end
-end)
-
 local flySpd=move:Sld("Fly Speed",10,300,80,function(v) flySpeed=v end)
-move:Tog("Noclip",false,function(s)
-ncOn=s if ncC then ncC:Disconnect() ncC=nil end
+move:Tog("Noclip",false,function(s) ncOn=s if ncC then ncC:Disconnect() ncC=nil end
 if s then ncC=RS.Stepped:Connect(function() pcall(function() local c=gc() if not c then return end for _,p in ipairs(c:GetDescendants()) do if p:IsA("BasePart") then p.CanCollide=false end end end) end) end
 end)
 move:Tog("Infinite Jump",false,function(s) end)
 local wspd=move:Sld("WalkSpeed",16,500,16,function(v) walkSpeed=v pcall(function() ghum().WalkSpeed=v end) end)
-move:Tog("Spin",false,function(s)
-spinOn=s if spinC then spinC:Disconnect() spinC=nil end
+move:Tog("Spin",false,function(s) spinOn=s if spinC then spinC:Disconnect() spinC=nil end
 pcall(function() local hrp=ghrp() if hrp then for _,v in ipairs(hrp:GetChildren()) do if v.Name=="SPIN" then v:Destroy() end end end end)
 if s then local hrp=ghrp() if hrp then local bav=Instance.new("BodyAngularVelocity") bav.Name="SPIN" bav.MaxTorque=Vector3.new(0,9e9,0) bav.AngularVelocity=Vector3.new(0,spinSpeed,0) bav.P=500 bav.Parent=hrp
 spinC=RS.Heartbeat:Connect(function() pcall(function() local b=ghrp() and ghrp():FindFirstChild("SPIN") if b then b.AngularVelocity=Vector3.new(0,spinSpeed,0) end end) end) end end
 end)
 local spnSpd=move:Sld("Spin Speed",1,100,20,function(v) spinSpeed=v end)
-move:Tog("Freecam",false,function(s)
-fcOn=s if fcC then fcC:Disconnect() fcC=nil end
+move:Tog("Freecam",false,function(s) fcOn=s if fcC then fcC:Disconnect() fcC=nil end
 if s then pcall(function() local cf=cam.CFrame fcPos=cf.Position local _,y,_=cf:ToEulerAnglesYXZ() fcYaw=y fcPitch=0 cam.CameraType=Enum.CameraType.Scriptable UIS.MouseBehavior=Enum.MouseBehavior.LockCenter local h=ghum() if h then h.WalkSpeed=0 end end)
 fcC=RS.RenderStepped:Connect(function(dt) pcall(function() local delta=UIS:GetMouseDelta() fcYaw=fcYaw-delta.X*0.004 fcPitch=math.clamp(fcPitch-delta.Y*0.004,-1.4,1.4) local rot=CFrame.Angles(0,fcYaw,0)*CFrame.Angles(fcPitch,0,0) local speed=60*dt local d=Vector3.zero
 if keys[Enum.KeyCode.W] then d=d+rot.LookVector end if keys[Enum.KeyCode.S] then d=d-rot.LookVector end if keys[Enum.KeyCode.A] then d=d-rot.RightVector end if keys[Enum.KeyCode.D] then d=d+rot.RightVector end if keys[Enum.KeyCode.Space] then d=d+Vector3.yAxis end if keys[Enum.KeyCode.LeftShift] then d=d-Vector3.yAxis end
@@ -268,23 +238,18 @@ else pcall(function() cam.CameraType=Enum.CameraType.Custom UIS.MouseBehavior=En
 end)
 local fovSld=move:Sld("FOV",70,120,70,function(v) fovValue=v pcall(function() cam.FieldOfView=v end) end)
 
--- COMBAT TAB
-combat:Tog("God Mode",false,function(s)
-godOn=s if godC then godC:Disconnect() godC=nil end
+combat:Tog("God Mode",false,function(s) godOn=s if godC then godC:Disconnect() godC=nil end
 if s then godC=RS.Heartbeat:Connect(function() pcall(function() local h=ghum() if h then h.Health=h.MaxHealth end local hrp=ghrp() if hrp then hrp.Velocity=Vector3.new(math.clamp(hrp.Velocity.X,-100,100),math.clamp(hrp.Velocity.Y,-100,100),math.clamp(hrp.Velocity.Z,-100,100)) end end) end) end
 end)
-combat:Tog("Anti Void",false,function(s)
-avOn=s if avC then avC:Disconnect() avC=nil end
+combat:Tog("Anti Void",false,function(s) avOn=s if avC then avC:Disconnect() avC=nil end
 if s then avC=RS.Heartbeat:Connect(function() pcall(function() local hrp=ghrp() if hrp and hrp.Position.Y<-50 then hrp.CFrame=CFrame.new(hrp.Position.X,50,hrp.Position.Z) hrp.Velocity=Vector3.zero end end) end) end
 end)
-combat:Tog("Hitbox Expander",false,function(s)
-hitboxOn=s if hitboxC then hitboxC:Disconnect() hitboxC=nil end
+combat:Tog("Hitbox Expander",false,function(s) hitboxOn=s if hitboxC then hitboxC:Disconnect() hitboxC=nil end
 if s then hitboxC=RS.Stepped:Connect(function() pcall(function() for _,p in ipairs(Players:GetPlayers()) do if p~=LP and p.Character then local head=p.Character:FindFirstChild("Head") if head then head.Size=Vector3.new(hitboxSize,hitboxSize,hitboxSize) head.Transparency=0.5 head.CanCollide=false head.Massless=true head.Material=Enum.Material.ForceField local mesh=head:FindFirstChildOfClass("SpecialMesh") if mesh then mesh:Destroy() end end end end end) end)
 else pcall(function() for _,p in ipairs(Players:GetPlayers()) do if p~=LP and p.Character then local head=p.Character:FindFirstChild("Head") if head then head.Size=Vector3.new(2,1,1) head.Transparency=0 head.Material=Enum.Material.Plastic end end end end) end
 end)
 local hbSz=combat:Sld("Hitbox Size",1,20,5,function(v) hitboxSize=v end)
-combat:Tog("ESP",false,function(s)
-espOn=s if espC then espC:Disconnect() espC=nil end
+combat:Tog("ESP",false,function(s) espOn=s if espC then espC:Disconnect() espC=nil end
 if s then espC=RS.Heartbeat:Connect(function() for _,p in ipairs(Players:GetPlayers()) do if p~=LP then pcall(function() local c=p.Character if not c then return end
 if not c:FindFirstChild("ESP") then local h=Instance.new("Highlight") h.Name="ESP" h.FillColor=C.Tx h.FillTransparency=0.8 h.OutlineColor=C.Tx h.Parent=c end
 local head=c:FindFirstChild("Head") if head and not head:FindFirstChild("ESPN") then local bb=Instance.new("BillboardGui") bb.Name="ESPN" bb.Parent=head bb.Size=UDim2.new(0,200,0,30) bb.StudsOffset=Vector3.new(0,2.5,0) bb.AlwaysOnTop=true bb.MaxDistance=1000
@@ -294,25 +259,20 @@ local espN=head and head:FindFirstChild("ESPN") if espN and ghrp() then local di
 end) end end end)
 else for _,p in ipairs(Players:GetPlayers()) do pcall(function() local c=p.Character if c then local e=c:FindFirstChild("ESP") if e then e:Destroy() end local head=c:FindFirstChild("Head") if head then local n=head:FindFirstChild("ESPN") if n then n:Destroy() end end end end) end end
 end)
-combat:Tog("Fullbright",false,function(s)
-fbOn=s if fbC then fbC:Disconnect() fbC=nil end
+combat:Tog("Fullbright",false,function(s) fbOn=s if fbC then fbC:Disconnect() fbC=nil end
 if s then origAmb=Lighting.Ambient fbC=RS.Heartbeat:Connect(function() pcall(function() Lighting.Ambient=Color3.new(1,1,1) Lighting.Brightness=2 Lighting.OutdoorAmbient=Color3.new(1,1,1) end) end)
 else pcall(function() if origAmb then Lighting.Ambient=origAmb end Lighting.Brightness=1 end) end
 end)
-combat:Tog("No Fog",false,function(s)
-nfOn=s if nfC then nfC:Disconnect() nfC=nil end
+combat:Tog("No Fog",false,function(s) nfOn=s if nfC then nfC:Disconnect() nfC=nil end
 if s then origFog=Lighting.FogEnd nfC=RS.Heartbeat:Connect(function() pcall(function() Lighting.FogEnd=1e9 end) end)
 else pcall(function() if origFog then Lighting.FogEnd=origFog end end) end
 end)
-combat:Tog("Anti AFK",false,function(s)
-aafkOn=s if s then pcall(function() if getconnections then for _,c in ipairs(getconnections(LP.Idled)) do c:Disable() end end end) end
+combat:Tog("Anti AFK",false,function(s) aafkOn=s if s then pcall(function() if getconnections then for _,c in ipairs(getconnections(LP.Idled)) do c:Disable() end end end) end
 end)
-combat:Tog("Anti Slowdown",false,function(s)
-aslowOn=s if aslowC then aslowC:Disconnect() aslowC=nil end
+combat:Tog("Anti Slowdown",false,function(s) aslowOn=s if aslowC then aslowC:Disconnect() aslowC=nil end
 if s then aslowC=RS.Heartbeat:Connect(function() pcall(function() local h=ghum() if h and h.WalkSpeed<16 then h.WalkSpeed=walkSpeed end end) end) end
 end)
 
--- AIMBOT TAB
 aim:Tog("Aimbot",false,function(s) AIM.on=s FC.Visible=s and AIM.showFov end)
 aim:Tog("Show FOV Circle",false,function(s) AIM.showFov=s FC.Visible=s and AIM.on end)
 local fovSz=aim:Sld("FOV Size",10,500,150,function(v) AIM.fov=v FC.Radius=v end)
@@ -321,7 +281,6 @@ local pred=aim:Sld("Prediction",0,50,15,function(v) AIM.pred=v/100 end)
 aim:Tog("Team Check",true,function(s) AIM.team=s end)
 aim:Tog("Wall Check",true,function(s) AIM.wall=s end)
 
--- BLADE BALL TAB
 bb:Tog("Auto Parry",false,function(s) BB.AutoParry=s end)
 bb:Tog("Smart Parry",false,function(s) BB.SmartParry=s end)
 local pDist=bb:Sld("Parry Distance",10,80,35,function(v) BB.ParryDist=v end)
@@ -330,10 +289,8 @@ bb:Tog("Auto Dodge",false,function(s) BB.AutoDodge=s end)
 local dDist=bb:Sld("Dodge Distance",5,30,12,function(v) BB.DodgeDist=v end)
 bb:Tog("Auto Spam Click",false,function(s) BB.AutoSpam=s end)
 local sDel=bb:Sld("Spam Delay",3,100,8,function(v) BB.SpamDelay=v/100 end)
-bb:Tog("Ball ESP",false,function(s)
-BB.BallESP=s
-if s then
-if not BB.BallHL then BB.BallHL=Instance.new("Highlight") BB.BallHL.Name="BallESP" BB.BallHL.FillTransparency=0.3 BB.BallHL.FillColor=Color3.fromRGB(255,50,50) end
+bb:Tog("Ball ESP",false,function(s) BB.BallESP=s
+if s then if not BB.BallHL then BB.BallHL=Instance.new("Highlight") BB.BallHL.Name="BallESP" BB.BallHL.FillTransparency=0.3 BB.BallHL.FillColor=Color3.fromRGB(255,50,50) end
 if not BB.BallBB then BB.BallBB=Instance.new("BillboardGui") BB.BallBB.Name="BallInfo" BB.BallBB.Size=UDim2.fromOffset(150,30) BB.BallBB.StudsOffset=Vector3.new(0,3,0) BB.BallBB.AlwaysOnTop=true
 local l=Instance.new("TextLabel") l.Size=UDim2.new(1,0,1,0) l.BackgroundTransparency=1 l.TextColor3=Color3.fromRGB(255,255,0) l.TextStrokeTransparency=0.3 l.Font=Enum.Font.GothamBold l.TextSize=12 l.Text="BALL" l.Parent=BB.BallBB end
 else if BB.BallHL then BB.BallHL:Destroy() BB.BallHL=nil end if BB.BallBB then BB.BallBB:Destroy() BB.BallBB=nil end end
@@ -345,116 +302,74 @@ bb:Tog("Auto Equip Sword",false,function(s) BB.AutoEquip=s end)
 bb:Tog("Hitbox Expander",false,function(s) BB.HitboxExp=s end)
 local bbHb=bb:Sld("Hitbox Size",5,30,15,function(v) BB.HitboxSize=v end)
 
--- PLAYERS TAB
-plr:Btn("Refresh Players",function()
-game:GetService("StarterGui"):SetCore("SendNotification",{Title="RYSA";Text="Players refreshed"})
+plr:Btn("Refresh Players",function() game:GetService("StarterGui"):SetCore("SendNotification",{Title="RYSA";Text="Players refreshed"}) end)
+plr:Btn("Fling All",function() if FL.allOn then FL.allOn=false FL.stopFlag=true return end FL.allOn=true FL.stopFlag=false
+task.spawn(function() while FL.allOn and not FL.stopFlag do local tg={} for _,p in ipairs(Players:GetPlayers()) do if p~=LP and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then local h=p.Character:FindFirstChildOfClass("Humanoid") if h and h.Health>0 then table.insert(tg,p) end end end
+if #tg==0 then FL.allOn=false return end for _,t in ipairs(tg) do if not FL.allOn or FL.stopFlag then return end task.wait(0.5) end end end)
 end)
-plr:Btn("Fling All",function()
-if FL.allOn then FL.allOn=false FL.stopFlag=true return end
-FL.allOn=true FL.stopFlag=false
-task.spawn(function()
-while FL.allOn and not FL.stopFlag do
-local tg={} for _,p in ipairs(Players:GetPlayers()) do if p~=LP and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then local h=p.Character:FindFirstChildOfClass("Humanoid") if h and h.Health>0 then table.insert(tg,p) end end end
-if #tg==0 then FL.allOn=false return end
-for _,t in ipairs(tg) do if not FL.allOn or FL.stopFlag then return end task.wait(0.5) end
-end
-end)
-end)
-plr:Btn("Touch Fling",function()
-if FL.touchOn then FL.touchOn=false return end
-local hrp=ghrp() if not hrp then return end FL.touchOn=true
-task.spawn(function()
-local ml=0.1
-while FL.touchOn do RS.Heartbeat:Wait() local c=gc() local h=c and c:FindFirstChild("HumanoidRootPart")
+plr:Btn("Touch Fling",function() if FL.touchOn then FL.touchOn=false return end local hrp=ghrp() if not hrp then return end FL.touchOn=true
+task.spawn(function() local ml=0.1 while FL.touchOn do RS.Heartbeat:Wait() local c=gc() local h=c and c:FindFirstChild("HumanoidRootPart")
 while FL.touchOn and not(c and c.Parent and h and h.Parent) do RS.Heartbeat:Wait() c=gc() h=c and c:FindFirstChild("HumanoidRootPart") end
 if FL.touchOn and h and h.Parent then local v=h.Velocity h.Velocity=v*10000+Vector3.new(0,10000,0) RS.RenderStepped:Wait()
 if c and c.Parent and h and h.Parent then h.Velocity=v end RS.Stepped:Wait()
-if c and c.Parent and h and h.Parent then h.Velocity=v+Vector3.new(0,ml,0) ml=ml*-1 end end end
+if c and c.Parent and h and h.Parent then h.Velocity=v+Vector3.new(0,ml,0) ml=ml*-1 end end end end)
 end)
-end)
-plr:Btn("Stop All",function() FL.allOn=false FL.stopFlag=true FL.touchOn=false fuckActive=false if fuckConn then fuckConn:Disconnect() fuckConn=nil end fuckTarget=nil
+plr:Btn("Stop All",function() FL.allOn=false FL.stopFlag=true FL.touchOn=false
 pcall(function() local hrp=ghrp() if hrp then for _,v in ipairs(hrp:GetChildren()) do if v:IsA("BodyMover") then v:Destroy() end end hrp.Velocity=Vector3.zero hrp.RotVelocity=Vector3.zero end local h=ghum() if h then h.PlatformStand=false end end)
 task.wait(0.3) FL.busy=false FL.stopFlag=false
 end)
 
--- MISC TAB
 misc:Btn("Rejoin",function() pcall(function() game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,LP) end) end)
-misc:Btn("Server Hop",function()
-pcall(function()
-local HS=game:GetService("HttpService")
+misc:Btn("Server Hop",function() pcall(function() local HS=game:GetService("HttpService")
 local d=HS:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
 for _,s in ipairs(d.data) do if s.id~=game.JobId and s.playing<s.maxPlayers then game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,s.id,LP) break end end
-end)
-end)
+end) end)
 misc:Btn("Reset Character",function() pcall(function() ghum().Health=0 end) end)
-misc:Btn("Anti Lag",function()
-pcall(function()
+misc:Btn("Anti Lag",function() pcall(function()
 for _,v in ipairs(WS:GetDescendants()) do pcall(function() if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Sparkles") or v:IsA("Explosion") then v:Destroy() end end) end
 for _,v in ipairs(Lighting:GetDescendants()) do pcall(function() if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("SunRaysEffect") or v:IsA("DepthOfFieldEffect") then v:Destroy() end end) end
 Lighting.GlobalShadows=false Lighting.FogEnd=1e9 pcall(function() settings().Rendering.QualityLevel=Enum.QualityLevel.Level01 end)
-end)
-end)
+end) end)
 misc:Btn("Destroy GUI",function() sg:Destroy() end)
 
--- INPUT HANDLING
 UIS.InputBegan:Connect(function(i,g) if not g and i.KeyCode then keys[i.KeyCode]=true if i.KeyCode==Enum.KeyCode.End then sg.Enabled=not sg.Enabled end end end)
 UIS.InputEnded:Connect(function(i) if i.KeyCode then keys[i.KeyCode]=nil end end)
 UIS.JumpRequest:Connect(function() pcall(function() ghum():ChangeState(Enum.HumanoidStateType.Jumping) end) end)
 
--- BLADE BALL FUNCTIONS
-local function FindBall()
-for _,obj in ipairs(WS:GetDescendants()) do if obj:IsA("BasePart") then local n=obj.Name:lower() if n=="ball" or n=="bladeball" or n=="blade" then return obj end end end return nil
-end
-
+local function FindBall() for _,obj in ipairs(WS:GetDescendants()) do if obj:IsA("BasePart") then local n=obj.Name:lower() if n=="ball" or n=="bladeball" or n=="blade" then return obj end end end return nil end
 local function GetBallSpeed(ball) if not ball then return 0 end return ball.AssemblyLinearVelocity.Magnitude end
-
-local function IsBallComingToMe(ball)
-if not ball then return false end local myRoot=ghrp() if not myRoot then return false end
+local function IsBallComingToMe(ball) if not ball then return false end local myRoot=ghrp() if not myRoot then return false end
 local dist=(ball.Position-myRoot.Position).Magnitude if dist>BB.ParryDist then return false end
 local ballVel=ball.AssemblyLinearVelocity if ballVel.Magnitude<5 then return false end
 local toMe=(myRoot.Position-ball.Position).Unit local ballDir=ballVel.Unit local dot=toMe:Dot(ballDir) return dot>0.3
 end
-
-local function GetBallETA(ball)
-if not ball then return math.huge end local myRoot=ghrp() if not myRoot then return math.huge end
+local function GetBallETA(ball) if not ball then return math.huge end local myRoot=ghrp() if not myRoot then return math.huge end
 local dist=(ball.Position-myRoot.Position).Magnitude local speed=ball.AssemblyLinearVelocity.Magnitude
 if speed<1 then return math.huge end return dist/speed
 end
-
 local function FireParry() pcall(function() local char=gc() if char then for _,tool in ipairs(char:GetChildren()) do if tool:IsA("Tool") then tool:Activate() end end end end) end
-
-local function RunAutoParry()
-if BB.ParryDebounce or not gc() then return end local ball=FindBall() if not ball then return end
+local function RunAutoParry() if BB.ParryDebounce or not gc() then return end local ball=FindBall() if not ball then return end
 if IsBallComingToMe(ball) then local eta=GetBallETA(ball) if eta<BB.ParryTime then BB.ParryDebounce=true FireParry() task.delay(0.4,function() BB.ParryDebounce=false end) end end
 end
-
-local function RunAutoDodge()
-if BB.DodgeDebounce or not gc() then return end local ball=FindBall() if not ball then return end
+local function RunAutoDodge() if BB.DodgeDebounce or not gc() then return end local ball=FindBall() if not ball then return end
 local myRoot=ghrp() if not myRoot then return end local dist=(ball.Position-myRoot.Position).Magnitude
 if dist>BB.DodgeDist then return end if IsBallComingToMe(ball) then BB.DodgeDebounce=true
 local ballDir=ball.AssemblyLinearVelocity.Unit local right=Vector3.new(-ballDir.Z,0,ballDir.X)
 if math.random()>0.5 then right=-right end pcall(function() myRoot.CFrame=myRoot.CFrame+(right*8) end)
 task.delay(0.5,function() BB.DodgeDebounce=false end) end
 end
-
-local function RunAutoSpam()
-if not gc() then return end local now=tick() if now-BB.lastSpam<BB.SpamDelay then return end BB.lastSpam=now
+local function RunAutoSpam() if not gc() then return end local now=tick() if now-BB.lastSpam<BB.SpamDelay then return end BB.lastSpam=now
 pcall(function() local char=gc() if char then for _,tool in ipairs(char:GetChildren()) do if tool:IsA("Tool") then tool:Activate() end end end end)
 end
-
-local function UpdateBallESP()
-if not BB.BallESP then return end local ball=FindBall()
+local function UpdateBallESP() if not BB.BallESP then return end local ball=FindBall()
 if ball and BB.BallHL then pcall(function() BB.BallHL.Adornee=ball BB.BallHL.Parent=ball BB.BallBB.Adornee=ball BB.BallBB.Parent=ball
 local myRoot=ghrp() if myRoot then local dist=math.floor((ball.Position-myRoot.Position).Magnitude) local speed=math.floor(GetBallSpeed(ball))
 local label=BB.BallBB:FindFirstChildOfClass("TextLabel") if label then label.Text="BALL | "..dist.."m | "..speed.." spd" end end end) end
 end
 
--- AIMBOT FUNCTIONS
 local RP_AIM=RaycastParams.new() RP_AIM.FilterType=Enum.RaycastFilterType.Exclude
 local function LOS(o,t) RP_AIM.FilterDescendantsInstances={LP.Character or {}} local r=WS:Raycast(o,t-o,RP_AIM) return not r or r.Distance>=(t-o).Magnitude*0.95 end
-
-local function GetClosestTarget()
-local closest=nil local shortest=AIM.fov local mousePos=UIS:GetMouseLocation()
+local function GetClosestTarget() local closest=nil local shortest=AIM.fov local mousePos=UIS:GetMouseLocation()
 for _,player in ipairs(Players:GetPlayers()) do if player~=LP and player.Character then
 if AIM.team then local tool=player.Character:FindFirstChildOfClass("Tool") if not tool or not(tool.Name:lower():find("knife") or tool.Name:lower():find("gun")) then continue end end
 local targetPart=player.Character:FindFirstChild(AIM.part) or player.Character:FindFirstChild("Head")
@@ -465,17 +380,10 @@ if dist<shortest then shortest=dist closest={Player=player,Part=targetPart,Scree
 end end end end return closest
 end
 
--- MAIN LOOPS
 local bbClock=0
-RS.Heartbeat:Connect(function(dt)
-if not gc() or not ghum() or ghum().Health<=0 then return end
-bbClock=bbClock+dt
-
-if BB.SmartParry or BB.AutoParry then pcall(RunAutoParry) end
-if BB.AutoDodge then pcall(RunAutoDodge) end
-if BB.AutoSpam then pcall(RunAutoSpam) end
+RS.Heartbeat:Connect(function(dt) if not gc() or not ghum() or ghum().Health<=0 then return end bbClock=bbClock+dt
+if BB.SmartParry or BB.AutoParry then pcall(RunAutoParry) end if BB.AutoDodge then pcall(RunAutoDodge) end if BB.AutoSpam then pcall(RunAutoSpam) end
 if BB.BallESP and bbClock>=0.1 then bbClock=0 pcall(UpdateBallESP) end
-
 if BB.NoParticles then pcall(function() for _,v in ipairs(WS:GetDescendants()) do if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then v.Enabled=false end end end) end
 if BB.AntiFling then pcall(function() local hrp=ghrp() if hrp and hrp.AssemblyLinearVelocity.Magnitude>100 then hrp.AssemblyLinearVelocity=Vector3.new(0,0,0) end end) end
 if BB.AntiSlow then pcall(function() local h=ghum() if h and h.WalkSpeed<16 then h.WalkSpeed=16 end end) end
@@ -483,8 +391,7 @@ if BB.HitboxExp then pcall(function() for _,p in ipairs(Players:GetPlayers()) do
 if BB.AutoEquip and bbClock>=1 then pcall(function() local bp=LP:FindFirstChild("Backpack") if bp then for _,tool in ipairs(bp:GetChildren()) do if tool:IsA("Tool") then local hum=ghum() if hum then hum:EquipTool(tool) end break end end end end) end
 end)
 
-RS.RenderStepped:Connect(function()
-if AIM.showFov and AIM.on then FC.Position=UIS:GetMouseLocation() FC.Visible=true else FC.Visible=false end
+RS.RenderStepped:Connect(function() if AIM.showFov and AIM.on then FC.Position=UIS:GetMouseLocation() FC.Visible=true else FC.Visible=false end
 if AIM.on then local keyPressed=false
 if AIM.key=="MouseButton1" then keyPressed=UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
 elseif AIM.key=="MouseButton2" then keyPressed=UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
@@ -500,16 +407,15 @@ if flying then flying=false if flyC then flyC:Disconnect() flyC=nil end pcall(fu
 if ncOn then ncOn=false if ncC then ncC:Disconnect() ncC=nil end end
 if fcOn then fcOn=false if fcC then fcC:Disconnect() fcC=nil end end
 if spinOn then spinOn=false if spinC then spinC:Disconnect() spinC=nil end end
-FL.allOn=false FL.stopFlag=true FL.touchOn=false fuckActive=false if fuckConn then fuckConn:Disconnect() fuckConn=nil end fuckTarget=nil
-task.wait(2) FL.busy=false
+FL.allOn=false FL.stopFlag=true FL.touchOn=false task.wait(2) FL.busy=false
 end)
 
-game:GetService("StarterGui"):SetCore("SendNotification",{Title="RYSA CHEAT";Text="Full Edition Loaded | Menu: End";Duration=3})
-print("✅ RYSA CHEAT - FULL EDITION")
+game:GetService("StarterGui"):SetCore("SendNotification",{Title="RYSA CHEAT";Text="Full Edition | Menu: End";Duration=3})
+print("✅ RYSA CHEAT - FULL EDITION LOADED")
 print("📌 Menü: End tuşu")
-print("🚀 Movement - Fly, Noclip, Freecam, Spin")
-print("⚔️ Combat - God, Hitbox, ESP, Fullbright")
-print("🎯 Aimbot - FOV, Smooth, Prediction")
-print("⚡ Blade Ball - Auto Parry, Dodge, ESP")
-print("👥 Players - Fling, Touch Fling")
-print("🔧 Misc - Rejoin, Server Hop, Anti Lag")
+print("🚀 Movement: Fly, Noclip, Freecam, Spin, WalkSpeed, FOV")
+print("⚔️ Combat: God, Anti Void, Hitbox, ESP, Fullbright, No Fog, Anti AFK/Slow")
+print("🎯 Aimbot: FOV Circle, Smoothness, Prediction, Team/Wall Check")
+print("⚡ Blade Ball: Auto Parry, Smart Parry, Auto Dodge, Auto Spam, Ball ESP, Hitbox, Anti Fling/Slow")
+print("👥 Players: Fling All, Touch Fling, Stop All")
+print("🔧 Misc: Rejoin, Server Hop, Reset, Anti Lag, Destroy GUI")
